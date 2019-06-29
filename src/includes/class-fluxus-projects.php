@@ -81,33 +81,6 @@ class Fluxus_Projects {
 		$this->define_hooks();
 	}
 
-	public function required_plugins() {
-		$plugins = array(
-			array(
-				'name'     => 'Media Meta Box',
-				'slug'     => 'media-meta-box',
-				'required' => true,
-				'source'   => 'http://miami.local/media-meta-box.zip',
-				'external_url' => 'http://miami.local/media-meta-box.zip'
-			)
-		);
-
-		$config = array(
-			'id'           => 'fluxus-prjects',        // Unique ID for hashing notices for multiple instances of TGMPA.
-			'default_path' => '',                      // Default absolute path to bundled plugins.
-			'menu'         => 'tgmpa-install-plugins', // Menu slug.
-			'parent_slug'  => 'themes.php',            // Parent menu slug.
-			'capability'   => 'edit_theme_options',    // Capability needed to view plugin install page, should be a capability associated with the parent menu used.
-			'has_notices'  => true,                    // Show admin notices or not.
-			'dismissable'  => true,                    // If false, a user cannot dismiss the nag message.
-			'dismiss_msg'  => '',                      // If 'dismissable' is false, this message will be output at top of nag.
-			'is_automatic' => false,                   // Automatically activate plugins after installation or not.
-			'message'      => '',                      // Message to output right before the plugins table.
-		);
-
-		tgmpa( $plugins, $config );
-	}
-
 	/**
 	 * Load the required dependencies for this plugin.
 	 *
@@ -166,10 +139,10 @@ class Fluxus_Projects {
 		 */
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-fluxus-projects-project.php';
 
-		// /**
-		//  * Class used to handle project media
-		//  */
-		// require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/project-media/class-fluxus-projects-project-media-meta-box.php';
+		/**
+		 * Project Types widget
+		 */
+		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/widgets/class-fluxus-projects-project-types-widget.php';
 
 		$this->loader = new Fluxus_Projects_Loader();
 	}
@@ -222,6 +195,7 @@ class Fluxus_Projects {
 		$this->loader->add_action( 'init', $this, 'init' );
 		$this->loader->add_action( 'pre_get_posts', $this, 'order_fluxus_portfolio' );
 		$this->loader->add_action( 'tgmpa_register', $this, 'required_plugins' );
+		$this->loader->add_action( 'widgets_init', $this, 'widgets_init' );
 	}
 
 	/**
@@ -317,6 +291,37 @@ class Fluxus_Projects {
 				}
 				$query->set( 'posts_per_page', -1 );
     }
+	}
+
+	public function required_plugins() {
+		$plugins = array(
+			array(
+				'name'     => 'Media Meta Box',
+				'slug'     => 'media-meta-box',
+				'required' => true,
+				'source'   => 'http://miami.local/media-meta-box.zip',
+				'external_url' => 'http://miami.local/media-meta-box.zip'
+			)
+		);
+
+		$config = array(
+			'id'           => 'fluxus-prjects',        // Unique ID for hashing notices for multiple instances of TGMPA.
+			'default_path' => '',                      // Default absolute path to bundled plugins.
+			'menu'         => 'tgmpa-install-plugins', // Menu slug.
+			'parent_slug'  => 'themes.php',            // Parent menu slug.
+			'capability'   => 'edit_theme_options',    // Capability needed to view plugin install page, should be a capability associated with the parent menu used.
+			'has_notices'  => true,                    // Show admin notices or not.
+			'dismissable'  => true,                    // If false, a user cannot dismiss the nag message.
+			'dismiss_msg'  => '',                      // If 'dismissable' is false, this message will be output at top of nag.
+			'is_automatic' => false,                   // Automatically activate plugins after installation or not.
+			'message'      => '',                      // Message to output right before the plugins table.
+		);
+
+		tgmpa( $plugins, $config );
+	}
+
+	public function widgets_init() {
+		register_widget( 'Fluxus_Projects_Project_Types_Widget' );
 	}
 
 	/**

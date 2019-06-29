@@ -178,7 +178,6 @@ class Fluxus_Projects {
 
 		$this->loader->add_action( 'admin_enqueue_scripts', $plugin_admin, 'enqueue_styles' );
 		$this->loader->add_action( 'admin_enqueue_scripts', $plugin_admin, 'enqueue_scripts' );
-		$this->loader->add_action( 'before', $plugin_admin, 'before' );
 		$this->loader->add_action( 'admin_init', $plugin_admin, 'admin_init' );
 	}
 
@@ -280,7 +279,8 @@ class Fluxus_Projects {
 		 * Grid image layout customization.
 		 */
 		if ( isset( $_GET['customize-layout'] ) && is_user_logged_in() && current_user_can( 'edit_pages' ) ) {
-			add_action( 'before', 'fluxus_customize_grid_layout_init' );
+			require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-fluxus-projects-grid-customizer.php';
+			new Fluxus_Projects_Grid_Customizer();
 		}
 	}
 

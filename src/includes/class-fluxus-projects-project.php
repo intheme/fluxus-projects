@@ -3,11 +3,11 @@
 class Fluxus_Projects_Project extends Fluxus_Projects_Page {
   protected $META_PREFIX = 'fluxus_project_';
   protected $meta_data_defaults = array(
-		'subtitle' => '',
-		'link'     => '',
-		'info'     => array(),
+		'subtitle' 			 => '',
+		'link'     			 => '',
+		'info'     			 => array(),
 		'other_projects' => 0,
-		'back_to_link' => 0
+		'back_to_link' 	 => 0
   );
 
   function get_featured_media() {

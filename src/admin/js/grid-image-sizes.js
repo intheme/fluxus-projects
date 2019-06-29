@@ -29,7 +29,7 @@
 
         $inner.append(
           '<a href="#" class="btn js-change-size dashicons-before dashicons-editor-distractionfree">' +
-            window.wpVars.clickToChangeSize +
+            window.fluxusProjectsGridCustomizer.clickToChangeSize +
             '</a>'
         );
         $inner.append(

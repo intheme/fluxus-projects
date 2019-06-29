@@ -43,12 +43,6 @@ class Fluxus_Projects_Admin {
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'admin/class-fluxus-projects-project-admin.php';
 	}
 
-	public function before() {
-		if ( $this->is_grid_size_management_page() ) {
-			$this->inject_grid_size_management_html();
-		}
-	}
-
 	public function admin_init() {
 		Fluxus_Projects_Deactivator::verify_dependencies();
 		global $pagenow;
@@ -110,54 +104,5 @@ class Fluxus_Projects_Admin {
 			$this->version,
 			'all'
 		);
-
-		if ( $this->is_grid_size_management_page() ) {
-			wp_enqueue_style(
-				'fluxus-wp-admin-grid-image-sizes',
-				get_template_directory_uri() . '/css/wp-admin/grid-image-sizes.css'
-			);
-			wp_enqueue_style( 'dashicons' );
-		}
-
-	}
-
-	/**
-	 * Register the JavaScript for the admin area.
-	 *
-	 * @since    1.0.0
-	 */
-	public function enqueue_scripts() {
-
-		if ( $this->is_grid_size_management_page() ) {
-			wp_enqueue_script(
-				'fluxus-projects-grid-image-sizes',
-				plugin_dir_url( __FILE__ ) . 'js/fluxus-projects-grid-image-sizes.js',
-				array( 'jquery', 'json2' ),
-				$this->version,
-				false
-			);
-
-			$wp_vars = array(
-				'clickToChangeSize' => __( 'Change size', 'fluxus-projects' )
-			);
-			wp_localize_script( 'fluxus-projects-grid-image-sizes', 'wpVars', $wp_vars );
-		}
-
-	}
-
-	private function is_grid_size_management_page() {
-		return isset( $_GET['customize-layout'] ) && is_user_logged_in() && current_user_can( 'edit_pages' );
-	}
-
-	private function inject_grid_size_management_html() {
-		?>
-		<div class="fluxus-customize-note">
-			<p>
-				<?php _e( 'Hover any image to customize size and cropping.', 'fluxus-projects' ); ?>
-			</p>
-			<a href="#" class="js-cancel-save-positions button button-blended btn-cancel"><?php _e( 'Cancel', 'fluxus-projects'); ?></a>
-			<a href="#" class="js-save-positions button button-black btn-save"><?php _e( 'Done', 'fluxus-projects'); ?></a>
-    </div>
-		<?php
 	}
 }

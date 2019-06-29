@@ -37,10 +37,13 @@ if ( ! defined( 'WPINC' ) ) {
  */
 define( 'FLUXUS_PROJECTS_VERSION', '1.0.0' );
 
+define( 'FLUXUS_PROJECTS_PLUGIN_NAME', 'fluxus-projects' );
+
 /**
  * Path to current plugin
  */
 define( 'FLUXUS_PROJECTS_PATH', plugin_dir_path( __FILE__ ) );
+define( 'FLUXUS_PROJECTS_URL', plugin_dir_url( __FILE__ ) );
 
 /**
  * The code that runs during plugin activation.

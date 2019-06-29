@@ -1,0 +1,81 @@
+.fluxus-customize-note {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  background: #fef035;
+  z-index: 1000;
+  padding: 15px 0;
+}
+
+.admin-bar-showing .fluxus-customize-note {
+  top: 32px;
+}
+
+@media screen and (max-width: 782px) {
+  .admin-bar-showing .fluxus-customize-note {
+    top: 46px;
+  }
+}
+
+.fluxus-customize-note p {
+  font-size: 16px;
+  color: #000;
+  font-family: georgia, serif;
+  font-style: italic;
+  float: left;
+  margin: 0 0 0 15px;
+}
+
+.fluxus-customize-note .btn-save,
+.fluxus-customize-note .btn-cancel {
+  float: right;
+  margin: 0 15px 0 0;
+}
+
+.grid-project .project-title__prefix {
+  display: none;
+}
+
+.grid-project .grid-project__overlay {
+  pointer-events: all;
+  cursor: default;
+}
+
+.grid-project .grid-project__preview {
+  cursor: default;
+}
+
+.grid-project .btn {
+  color: #fff;
+  font-size: 14px;
+  font-weight: bold;
+  display: inline-block;
+  text-decoration: none;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 6px 10px;
+  margin: 0 10px 10px 0;
+  line-height: 24px;
+}
+
+.grid-project .btn:last-child {
+  margin-right: 0;
+}
+
+.grid-project .btn:hover {
+  border-color: #999;
+}
+
+.grid-project .btn:before {
+  margin: 3px 5px 0 0;
+}
+
+.grid-project .meta-info {
+  position: absolute;
+  bottom: 10px;
+  left: 10px;
+  font-size: 12px;
+  color: #fff;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}

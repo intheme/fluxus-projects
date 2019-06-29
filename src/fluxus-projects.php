@@ -38,21 +38,24 @@ if ( ! defined( 'WPINC' ) ) {
 define( 'FLUXUS_PROJECTS_VERSION', '1.0.0' );
 
 /**
+ * Path to current plugin
+ */
+define( 'FLUXUS_PROJECTS_PATH', plugin_dir_path( __FILE__ ) );
+
+/**
  * The code that runs during plugin activation.
- * This action is documented in includes/class-fluxus-projects-activator.php
  */
 function activate_fluxus_projects() {
 	require_once plugin_dir_path( __FILE__ ) . 'includes/class-fluxus-projects-activator.php';
-	Fluxus_Projects_Activator::activate();
+	Fluxus_Projects_Activator::on_activate();
 }
 
 /**
  * The code that runs during plugin deactivation.
- * This action is documented in includes/class-fluxus-projects-deactivator.php
  */
+require_once plugin_dir_path( __FILE__ ) . 'includes/class-fluxus-projects-deactivator.php';
 function deactivate_fluxus_projects() {
-	require_once plugin_dir_path( __FILE__ ) . 'includes/class-fluxus-projects-deactivator.php';
-	Fluxus_Projects_Deactivator::deactivate();
+	Fluxus_Projects_Deactivator::on_deactivate();
 }
 
 register_activation_hook( __FILE__, 'activate_fluxus_projects' );

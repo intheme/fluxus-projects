@@ -22,36 +22,57 @@
  */
 class Fluxus_Projects_Admin {
 
-	/**
-	 * The ID of this plugin.
-	 *
-	 * @since    1.0.0
-	 * @access   private
-	 * @var      string    $plugin_name    The ID of this plugin.
-	 */
 	private $plugin_name;
-
-	/**
-	 * The version of this plugin.
-	 *
-	 * @since    1.0.0
-	 * @access   private
-	 * @var      string    $version    The current version of this plugin.
-	 */
 	private $version;
 
-	/**
-	 * Initialize the class and set its properties.
-	 *
-	 * @since    1.0.0
-	 * @param      string    $plugin_name       The name of this plugin.
-	 * @param      string    $version    The version of this plugin.
-	 */
 	public function __construct( $plugin_name, $version ) {
-
 		$this->plugin_name = $plugin_name;
 		$this->version = $version;
+		$this->load_dependencies();
+	}
 
+	private function load_dependencies() {
+		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'admin/class-fluxus-projects-wp-ui.php';
+	}
+
+	public function before() {
+		if ( $this->is_grid_size_management_page() ) {
+			$this->inject_grid_size_management_html();
+		}
+	}
+
+	public function admin_init() {
+		Fluxus_Projects_Deactivator::verify_dependencies();
+		global $pagenow;
+
+    $post_type = isset( $_GET[ 'post_type' ] ) ? $_GET[ 'post_type' ] : '';
+
+    if ( $post_id = Fluxus_Projects_Utils::post_id_from_query_params() ) {
+        $post = get_post( $post_id );
+        $post_type = $post->post_type;
+    }
+
+    if ( $post_type == 'fluxus_portfolio' ) {
+        // Project List Page
+        if ( 'edit.php' == $pagenow ) {
+					$fluxus_projects_wp_ui = new Fluxus_Projects_Wp_Ui();
+
+					// Custom columns in Project List
+					add_filter( 'manage_edit-fluxus_portfolio_columns', array( $fluxus_projects_wp_ui, 'list_columns' ) );
+					add_action( 'manage_posts_custom_column', array( $fluxus_projects_wp_ui, 'list_data' ) );
+        }
+
+        // Post Edit or Post New Page
+        if ( in_array( $pagenow, array( 'post.php', 'post-new.php', 'admin-ajax.php' ) ) ) {
+					new Fluxus_Projects_Project_Admin( $post_id );
+        }
+    }
+
+    if ( $post_id ) {
+			if ( get_page_template_slug( $post_id ) === 'template-portfolio-grid.php' ) {
+				new Fluxus_Projects_Grid_Portfolio_Admin( $post_id );
+			}
+    }
 	}
 
 	/**
@@ -73,7 +94,21 @@ class Fluxus_Projects_Admin {
 		 * class.
 		 */
 
-		wp_enqueue_style( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'css/fluxus-projects-admin.css', array(), $this->version, 'all' );
+		wp_enqueue_style(
+			$this->plugin_name,
+			plugin_dir_url( __FILE__ ) . 'css/fluxus-projects-admin.css',
+			array(),
+			$this->version,
+			'all'
+		);
+
+		if ( $this->is_grid_size_management_page() ) {
+			wp_enqueue_style(
+				'fluxus-wp-admin-grid-image-sizes',
+				get_template_directory_uri() . '/css/wp-admin/grid-image-sizes.css'
+			);
+			wp_enqueue_style( 'dashicons' );
+		}
 
 	}
 
@@ -96,8 +131,44 @@ class Fluxus_Projects_Admin {
 		 * class.
 		 */
 
-		wp_enqueue_script( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'js/fluxus-projects-admin.js', array( 'jquery' ), $this->version, false );
+		wp_enqueue_script(
+			$this->plugin_name,
+			plugin_dir_url( __FILE__ ) . 'js/fluxus-projects-admin.js',
+			array( 'jquery' ),
+			$this->version,
+			false
+		);
+
+		if ( $this->is_grid_size_management_page() ) {
+			wp_enqueue_script(
+				'fluxus-projects-grid-image-sizes',
+				plugin_dir_url( __FILE__ ) . 'js/fluxus-projects-grid-image-sizes.js',
+				array( 'jquery', 'json2' ),
+				$this->version,
+				false
+			);
+
+			$wp_vars = array(
+				'clickToChangeSize' => __( 'Change size', 'fluxus-projects' )
+			);
+			wp_localize_script( 'fluxus-projects-grid-image-sizes', 'wpVars', $wp_vars );
+		}
 
 	}
 
+	private function is_grid_size_management_page() {
+		return isset( $_GET['customize-layout'] ) && is_user_logged_in() && current_user_can( 'edit_pages' );
+	}
+
+	private function inject_grid_size_management_html() {
+		?>
+		<div class="fluxus-customize-note">
+			<p>
+				<?php _e( 'Hover any image to customize size and cropping.', 'fluxus-projects' ); ?>
+			</p>
+			<a href="#" class="js-cancel-save-positions button button-blended btn-cancel"><?php _e( 'Cancel', 'fluxus-projects'); ?></a>
+			<a href="#" class="js-save-positions button button-black btn-save"><?php _e( 'Done', 'fluxus-projects'); ?></a>
+    </div>
+		<?php
+	}
 }

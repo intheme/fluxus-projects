@@ -29,8 +29,12 @@ class Fluxus_Projects_Activator {
 	 *
 	 * @since    1.0.0
 	 */
-	public static function activate() {
+	public static function on_activate() {
 
+	}
+
+	public static function has_required_plugins_installed() {
+		return false;
 	}
 
 }

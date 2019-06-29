@@ -32,7 +32,15 @@ class Fluxus_Projects_Admin {
 	}
 
 	private function load_dependencies() {
+		/**
+		 * Class that extends WP admin UI with few elements for displaying fluxus_portfolio
+		 */
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'admin/class-fluxus-projects-wp-ui.php';
+
+		/**
+		 * Class responsible for showing project page options.
+		 */
+		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'admin/class-fluxus-projects-project-admin.php';
 	}
 
 	public function before() {
@@ -64,7 +72,7 @@ class Fluxus_Projects_Admin {
 
         // Post Edit or Post New Page
         if ( in_array( $pagenow, array( 'post.php', 'post-new.php', 'admin-ajax.php' ) ) ) {
-					new Fluxus_Projects_Project_Admin( $post_id );
+					new Fluxus_Projects_Project_Admin( $post_id, $this->plugin_name, $this->version );
         }
     }
 
@@ -118,26 +126,6 @@ class Fluxus_Projects_Admin {
 	 * @since    1.0.0
 	 */
 	public function enqueue_scripts() {
-
-		/**
-		 * This function is provided for demonstration purposes only.
-		 *
-		 * An instance of this class should be passed to the run() function
-		 * defined in Fluxus_Projects_Loader as all of the hooks are defined
-		 * in that particular class.
-		 *
-		 * The Fluxus_Projects_Loader will then create the relationship
-		 * between the defined hooks and the functions defined in this
-		 * class.
-		 */
-
-		wp_enqueue_script(
-			$this->plugin_name,
-			plugin_dir_url( __FILE__ ) . 'js/fluxus-projects-admin.js',
-			array( 'jquery' ),
-			$this->version,
-			false
-		);
 
 		if ( $this->is_grid_size_management_page() ) {
 			wp_enqueue_script(

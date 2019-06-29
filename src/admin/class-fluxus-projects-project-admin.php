@@ -1,178 +1,180 @@
 <?php
 
-/**
- * Full Page Slider admin UI
- */
+class Fluxus_Projects_Project_Admin {
+	function __construct( $post_id, $plugin_name, $version ) {
+		$this->post_id = $post_id;
+		$this->plugin_name = $plugin_name;
+		$this->version = $version;
 
-class Fluxus_Projects_Project_Admin extends Fluxus_Projects_Admin_Page {
-    public $scripts = array(
-        array( 'fluxus-wp-admin-portfolio', 'portfolio-project.js', array( 'jquery' ) )
-    );
+		add_meta_box(
+			'fluxus-project-info-meta',
+			__( 'Project Options', 'fluxus-projects' ),
+			array( $this, 'meta_box_options_content' ),
+			'fluxus_portfolio',
+			'normal',
+			'low'
+		);
 
-    function __construct( $post_id ) {
-        parent::__construct( $post_id );
+		add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_scripts' ));
+		add_action( 'save_post', array( $this, 'meta_box_options_content_save' ), 1, 1 );
 
-        // Setup project options meta box
-        add_meta_box(
-            'fluxus-project-info-meta',
-            __( 'Project Options', 'fluxus' ),
-            array( $this, 'meta_box_options_content' ),
-            'fluxus_portfolio',
-            'normal',
-            'low'
-        );
-        add_action( 'save_post', array( $this, 'meta_box_options_content_save' ), 1, 1 );
+		// Setup project media manager
+		$project_media_meta_box = new Fluxus_Projects_Project_Media_Meta_Box( $post_id );
+		$project_media_meta_box->initialize_admin();
+	}
 
-        // Setup project media manager
-        $project_media_meta_box = new Fluxus_Projects_Project_Media_Meta_Box( $post_id );
-        $project_media_meta_box->initialize_admin();
-    }
+	function meta_box_options_content() {
+		$project = new Fluxus_Projects_Project( $this->post_id );
 
-    function meta_box_options_content() {
+		?>
+		<div class="fluxus-meta-field">
+			<label for="fluxus_project_subtitle"><?php _e( 'Project Subtitle', 'fluxus-projects' ); ?></label>
+			<div class="field">
+				<input type="text" name="fluxus_project_subtitle" value="<?php echo esc_attr( $project->meta_subtitle ); ?>" />
+			</div>
+		</div>
+		<div class="fluxus-meta-field">
+			<label for="fluxus_project_link"><?php _e( 'Project External Link', 'fluxus-projects' ); ?></label>
+			<div class="field">
+				<input type="text" name="fluxus_project_link" value="<?php echo esc_attr( $project->meta_link ); ?>" class="url" />
+			</div>
+		</div>
+		<div class="fluxus-meta-group">
+			<h2><?php _e( 'Project information', 'fluxus-projects' ); ?></h2>
+			<table class="fluxus-table fluxus-project-information">
+				<thead>
+					<tr>
+						<td><?php _e( 'Title', 'fluxus-projects' ); ?></td>
+						<td><?php _e( 'Content', 'fluxus-projects' ); ?></td>
+					</tr>
+				</thead>
+				<tbody><?php
+					if ( $project->meta_info && is_array( $project->meta_info ) ) :
+						foreach ( $project->meta_info as $info ) : ?>
+							<tr>
+								<td>
+									<input type="text" name="fluxus_project_info_title[]" value="<?php echo esc_attr( $info['title'] ); ?>" />
+								</td>
+								<td>
+									<textarea name="fluxus_project_info_content[]">
+										<?php echo esc_textarea( $info['content'] ); ?>
+									</textarea>
+								</td>
+							</tr><?php
+						endforeach;
+					endif; ?>
+					<tr class="add-element">
+						<td colspan="2">
+							<?php _e( 'To add project information enter the title and content fields below.', 'fluxus-projects' ); ?>
+						</td>
+					</tr>
+					<tr>
+						<td><input type="text" name="fluxus_project_info_add_title" value="" /></td>
+						<td><textarea name="fluxus_project_info_add_content"></textarea></td>
+					</tr>
+					<tr>
+						<td colspan="2">
+							<a href="#" id="fluxus-add-project-info" class="button-secondary"><?php _e( 'Add project information', 'fluxus-projects' ); ?></a>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
 
-        $project = new Fluxus_Projects_Project( $this->post_id );
+		<div class="fluxus-meta-group">
+			<h2><?php _e( 'Project navigation', 'fluxus-projects' ); ?></h2>
+			<div class="fluxus-meta-field">
+				<label for="fluxus_project_other_projects"><?php _e( 'Other projects', 'fluxus-projects' ); ?></label>
+				<div class="field">
+					<?php
 
-        ?>
-        <div class="fluxus-meta-field">
-            <label for="fluxus_project_subtitle"><?php _e( 'Project Subtitle', 'fluxus' ); ?></label>
-            <div class="field">
-                <input type="text" name="fluxus_project_subtitle" value="<?php echo esc_attr( $project->meta_subtitle ); ?>" />
-            </div>
-        </div>
-        <div class="fluxus-meta-field">
-            <label for="fluxus_project_link"><?php _e( 'Project External Link', 'fluxus' ); ?></label>
-            <div class="field">
-                <input type="text" name="fluxus_project_link" value="<?php echo esc_attr( $project->meta_link ); ?>" class="url" />
-            </div>
-        </div>
-        <div class="fluxus-meta-group">
-            <h2><?php _e( 'Project information', 'fluxus' ); ?></h2>
-            <table class="fluxus-table fluxus-project-information">
-                <thead>
-                    <tr>
-                        <td><?php _e( 'Title', 'fluxus' ); ?></td>
-                        <td><?php _e( 'Content', 'fluxus' ); ?></td>
-                    </tr>
-                </thead>
-                <tbody><?php
-                    if ( $project->meta_info && is_array( $project->meta_info ) ) :
-                        foreach ( $project->meta_info as $info ) : ?>
-                            <tr>
-                                <td>
-                                    <input type="text" name="fluxus_project_info_title[]" value="<?php echo esc_attr( $info['title'] ); ?>" />
-                                </td>
-                                <td>
-                                    <textarea name="fluxus_project_info_content[]">
-                                        <?php echo esc_textarea( $info['content'] ); ?>
-                                    </textarea>
-                                </td>
-                            </tr><?php
-                        endforeach;
-                    endif; ?>
-                    <tr class="add-element">
-                        <td colspan="2">
-                            <?php _e( 'To add project information enter the title and content fields below.', 'fluxus' ); ?>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td><input type="text" name="fluxus_project_info_add_title" value="" /></td>
-                        <td><textarea name="fluxus_project_info_add_content"></textarea></td>
-                    </tr>
-                    <tr>
-                        <td colspan="2">
-                            <a href="#" id="fluxus-add-project-info" class="button-secondary"><?php _e( 'Add project information', 'fluxus' ); ?></a>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
+					wp_dropdown_categories( array(
+						'show_option_all' => __( 'All Projects', 'fluxus-projects' ),
+						'hide_empty'         => 0,
+						'selected'           => $project->meta_other_projects,
+						'hierarchical'       => 1,
+						'name'               => 'fluxus_project_other_projects',
+						'id'                 => 'fluxus_project_other_projects',
+						'taxonomy'           => 'fluxus-project-type'
+					));
 
-        <div class="fluxus-meta-group">
-            <h2><?php _e( 'Project navigation', 'fluxus' ); ?></h2>
-            <div class="fluxus-meta-field">
-                <label for="fluxus_project_other_projects"><?php _e( 'Other projects', 'fluxus' ); ?></label>
-                <div class="field">
-                    <?php
+					?>
+				</div>
+			</div>
+			<div class="fluxus-meta-field">
+				<label for="fluxus_project_back_to_link"><?php _e( 'Back to link', 'fluxus-projects' ); ?></label>
+				<div class="field">
+					<?php
 
-                    wp_dropdown_categories( array(
-                        'show_option_all' => __( 'All Projects', 'fluxus' ),
-                        'hide_empty'         => 0,
-                        'selected'           => $project->meta_other_projects,
-                        'hierarchical'       => 1,
-                        'name'               => 'fluxus_project_other_projects',
-                        'id'                 => 'fluxus_project_other_projects',
-                        'taxonomy'           => 'fluxus-project-type'
-                    ));
+					wp_dropdown_categories( array(
+						'show_option_all' => __( 'Back to Portfolio', 'fluxus-projects' ),
+						'hide_empty'         => 0,
+						'selected'           => $project->meta_back_to_link,
+						'hierarchical'       => 1,
+						'name'               => 'fluxus_project_back_to_link',
+						'id'                 => 'fluxus_project_back_to_link',
+						'taxonomy'           => 'fluxus-project-type'
+					));
 
-                    ?>
-                </div>
-            </div>
-            <div class="fluxus-meta-field">
-                <label for="fluxus_project_back_to_link"><?php _e( 'Back to link', 'fluxus' ); ?></label>
-                <div class="field">
-                    <?php
+					?>
+				</div>
+			</div>
+		</div>
 
-                    wp_dropdown_categories( array(
-                        'show_option_all' => __( 'Back to Portfolio', 'fluxus' ),
-                        'hide_empty'         => 0,
-                        'selected'           => $project->meta_back_to_link,
-                        'hierarchical'       => 1,
-                        'name'               => 'fluxus_project_back_to_link',
-                        'id'                 => 'fluxus_project_back_to_link',
-                        'taxonomy'           => 'fluxus-project-type'
-                    ));
+		<?php
 
-                    ?>
-                </div>
-            </div>
-        </div>
-
-        <?php
-
-    }
+	}
 
 
-    function meta_box_options_content_save( $post_id ) {
+	function meta_box_options_content_save( $post_id ) {
 
-        if ( ! it_check_save_action( $post_id, 'fluxus_portfolio' ) ) {
-            return $post_id;
-        }
+		if ( ! it_check_save_action( $post_id, 'fluxus_portfolio' ) ) {
+			return $post_id;
+		}
 
-        $project = new Fluxus_Projects_Project( $post_id );
+		$project = new Fluxus_Projects_Project( $post_id );
 
-        $project->update_from_array( $_POST );
+		$project->update_from_array( $_POST );
 
-        if ( it_key_is_array( $_POST, 'fluxus_project_info_title' ) ) {
+		if ( it_key_is_array( $_POST, 'fluxus_project_info_title' ) ) {
 
-            $titles = $_POST['fluxus_project_info_title'];
-            $contents = $_POST['fluxus_project_info_content'];
+			$titles = $_POST['fluxus_project_info_title'];
+			$contents = $_POST['fluxus_project_info_content'];
 
-            $data = array();
+			$data = array();
 
-            foreach ( $titles as $index => $title ) {
+			foreach ( $titles as $index => $title ) {
 
-                if ( !empty( $title ) && !empty( $contents[$index] ) ) {
+				if ( !empty( $title ) && !empty( $contents[$index] ) ) {
 
-                    $data[] = array(
-                            'title' => $title,
-                            'content' => $contents[$index]
-                        );
+					$data[] = array(
+							'title' => $title,
+							'content' => $contents[$index]
+						);
 
-                }
+				}
 
-            }
+			}
 
-            $project->meta_info = $data;
+			$project->meta_info = $data;
 
-        } else {
+		} else {
 
-            $project->meta_info = array();
+			$project->meta_info = array();
 
-        }
+		}
 
-        $project->save();
+		$project->save();
 
-    }
+	}
 
+	public function enqueue_scripts() {
+		wp_enqueue_script(
+			$this->plugin_name,
+			plugin_dir_url( __FILE__ ) . 'js/fluxus-projects-admin.js',
+			array( 'jquery' ),
+			$this->version,
+			false
+		);
+	}
 }
-

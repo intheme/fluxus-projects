@@ -159,19 +159,4 @@ abstract class Fluxus_Projects_Page {
 
     return $this;
   }
-
-  static function register( $post_type, $args = array() ) {
-    $defaults = array(
-      'public' => false,
-      'publicly_queryable' => false,
-      'show_ui' => false,
-      'show_in_menu' => false,
-      'query_var' => false,
-      'capability_type' => 'page'
-    );
-
-    $args = array_merge( $defaults, $args );
-
-    register_post_type( $post_type, $args );
-  }
 }

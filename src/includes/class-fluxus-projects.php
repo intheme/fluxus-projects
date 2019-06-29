@@ -140,6 +140,11 @@ class Fluxus_Projects {
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-fluxus-projects-project.php';
 
 		/**
+		 * Class for storing Grid Portfolio data.
+		 */
+		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-fluxus-projects-grid-portfolio.php';
+
+		/**
 		 * Project Types widget
 		 */
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/widgets/class-fluxus-projects-project-types-widget.php';

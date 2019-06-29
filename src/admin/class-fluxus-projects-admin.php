@@ -78,7 +78,8 @@ class Fluxus_Projects_Admin {
 
     if ( $post_id ) {
 			if ( get_page_template_slug( $post_id ) === 'template-portfolio-grid.php' ) {
-				new Fluxus_Projects_Grid_Portfolio_Admin( $post_id );
+				require_once plugin_dir_path( __FILE__ ) . 'class-fluxus-projects-grid-portfolio-admin.php';
+				new Fluxus_Projects_Grid_Portfolio_Admin( $post_id, $this->plugin_name, $this->version );
 			}
     }
 	}

@@ -65,7 +65,7 @@ class Fluxus_Projects_Project extends Fluxus_Projects_Page {
 			}
 		}
 
-		return fluxus_get_default_portfolio_permalink();
+		return Fluxus_Projects::get_default_portfolio_permalink();
   }
 
   function get_other_projects( $number_to_display = 8, $slice_index = 1 ) {

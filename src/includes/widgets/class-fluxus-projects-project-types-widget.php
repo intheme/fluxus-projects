@@ -131,7 +131,7 @@ class Fluxus_Projects_Project_Types_Widget extends WP_Widget {
 			} else {
 
         $tags = get_terms( 'fluxus-project-type' );
-        $all_link = fluxus_get_default_portfolio_permalink();
+        $all_link = Fluxus_Projects::get_default_portfolio_permalink();
         $all_class = $active_tag_slug ? '' : 'active';
 
 			}

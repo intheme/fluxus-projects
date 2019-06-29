@@ -177,7 +177,6 @@ class Fluxus_Projects {
 		$plugin_admin = new Fluxus_Projects_Admin( $this->get_plugin_name(), $this->get_version() );
 
 		$this->loader->add_action( 'admin_enqueue_scripts', $plugin_admin, 'enqueue_styles' );
-		$this->loader->add_action( 'admin_enqueue_scripts', $plugin_admin, 'enqueue_scripts' );
 		$this->loader->add_action( 'admin_init', $plugin_admin, 'admin_init' );
 	}
 
@@ -255,7 +254,7 @@ class Fluxus_Projects {
 			$languages = array_keys( icl_get_languages( 'skip_missing=0' ) );
 			$bases = array();
 			foreach ( $languages as $language ) {
-				$bases[$language] = $this->get_default_portfolio_slug( $language );
+				$bases[$language] = self::get_default_portfolio_slug( $language );
 			}
 			$bases = array_unique( $bases );
 
@@ -265,7 +264,7 @@ class Fluxus_Projects {
 			}
 		}
 
-		$base = $this->get_default_portfolio_slug();
+		$base = self::get_default_portfolio_slug();
 		add_permastruct( 'fluxus-project-type', "{$base}/%fluxus-project-type%", false );
 		add_permastruct( 'fluxus_portfolio', "{$base}/%fluxus-project-type%/%fluxus_portfolio%", false );
 		add_permastruct( 'fluxus-project-type-default', 'portfolio/%fluxus-project-type%', false );
@@ -373,8 +372,8 @@ class Fluxus_Projects {
 	 * Returns slug of a page that has a 'Horizontal Portfolio' template assigned.
 	 * If no such page can be found, then 'portfolio' is returned.
 	 */
-	private function get_default_portfolio_slug( $language = '' ) {
-		$portfolio_page = $this->get_default_portfolio_page( $language );
+	static public function get_default_portfolio_slug( $language = '' ) {
+		$portfolio_page = self::get_default_portfolio_page( $language );
 
 		if ( $portfolio_page ) {
 			$slug = $portfolio_page->post_name;
@@ -392,7 +391,7 @@ class Fluxus_Projects {
 	 * @param string $language Return default portfolio page for a specific language.
 	 * @return mixed returns page object or FALSE if a page couldn't be found.
 	 */
-	private function get_default_portfolio_page( $language = '' ) {
+	static public function get_default_portfolio_page( $language = '' ) {
 		$cache_key = Fluxus_Projects_Utils::get_save_post_cache_key( 'portfolio-base-' . $language );
 		$found = false;
 		$cached_data = wp_cache_get( $cache_key, 'fluxus-projects', false, $found );
@@ -428,6 +427,25 @@ class Fluxus_Projects {
 		wp_cache_set( $cache_key, $result, 'fluxus-projects' );
 
 		return $result;
+	}
+
+
+	public static function get_default_portfolio_permalink() {
+		if ( Fluxus_Projects_Wpml::is_active() ) {
+			$language = ICL_LANGUAGE_CODE;
+		} else {
+			$language = '';
+		}
+
+		$portfolio_page = self::get_default_portfolio_page( $language );
+
+		if ( $portfolio_page ) {
+			$link = get_permalink( $portfolio_page->ID );
+		} else {
+			$link = '';
+		}
+
+		return $link;
 	}
 
 }

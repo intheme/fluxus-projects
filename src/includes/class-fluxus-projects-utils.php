@@ -24,64 +24,64 @@ class Fluxus_Projects_Utils {
 	 *
 	 * @since    1.0.0
 	 */
-	static public function is_wpml_plugin_active() {
+	public static function is_wpml_plugin_active() {
 		global $sitepress;
-    return defined( 'ICL_LANGUAGE_CODE' ) && ICL_LANGUAGE_CODE && $sitepress;
+		return defined( 'ICL_LANGUAGE_CODE' ) && ICL_LANGUAGE_CODE && $sitepress;
 	}
 
-	static public function is_media_meta_box_active() {
+	public static function is_media_meta_box_active() {
 		return defined( 'Media_Meta_Box' );
 	}
 
-  /**
-   * Flushes WP rewrite rules cache
-   */
-  static public function flush_rewrite_rules() {
-    global $wp_rewrite;
+	/**
+	 * Flushes WP rewrite rules cache
+	 */
+	public static function flush_rewrite_rules() {
+		global $wp_rewrite;
 
 		$wp_rewrite->flush_rules();
 		flush_rewrite_rules();
-  }
+	}
 
-  static public function get_save_post_cache_key( $cache_key ) {
-    $namespace = wp_cache_get( 'fluxus-projects-save-post-cache-key' );
-    if ( $namespace === false ) {
-      $namespace = 1;
-      wp_cache_set( 'fluxus-projects-save-post-cache-key', $namespace );
-    }
+	public static function get_save_post_cache_key( $cache_key ) {
+		$namespace = wp_cache_get( 'fluxus-projects-save-post-cache-key' );
+		if ( $namespace === false ) {
+			$namespace = 1;
+			wp_cache_set( 'fluxus-projects-save-post-cache-key', $namespace );
+		}
 
-    return $cache_key . ':' . $namespace;
+		return $cache_key . ':' . $namespace;
 	}
 
 	static function fluxus_clear_save_post_cache( $post_id ) {
-    if ( defined('DOING_AUTOSAVE') && DOING_AUTOSAVE ) {
+		if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) {
 			return;
-    }
+		}
 
-    if ( wp_is_post_revision( $post_id ) ) {
+		if ( wp_is_post_revision( $post_id ) ) {
 			return;
-    }
+		}
 
-    self::flush_rewrite_rules();
-    wp_cache_incr( 'fluxus_save_post_cache_key' );
+		self::flush_rewrite_rules();
+		wp_cache_incr( 'fluxus_save_post_cache_key' );
 	}
 
-  /**
-   * Return posts that match given template filename
-   */
-  static public function it_find_page_by_template( $template_filename, $args = array() ) {
+	/**
+	 * Return posts that match given template filename
+	 */
+	public static function it_find_page_by_template( $template_filename, $args = array() ) {
 		$defaults = array(
-			'post_type' => 'page',
+			'post_type'      => 'page',
 			'posts_per_page' => -1,
-			'meta_query' => array(
+			'meta_query'     => array(
 				array(
-					'key' => '_wp_page_template',
-					'value' => $template_filename,
-					'compare' => '='
-				)
+					'key'     => '_wp_page_template',
+					'value'   => $template_filename,
+					'compare' => '=',
+				),
 			),
-			'orderby' => 'ID',
-			'order' => 'asc',
+			'orderby'        => 'ID',
+			'order'          => 'asc',
 		);
 
 		$args = wp_parse_args( $args, $defaults );
@@ -92,7 +92,7 @@ class Fluxus_Projects_Utils {
 	/**
 	 * Returns post ID from $_GET / $_POST arrays.
 	 */
-	static public function post_id_from_query_params() {
+	public static function post_id_from_query_params() {
 		if ( isset( $_GET['post'] ) ) {
 			return $_GET['post'];
 		}
@@ -120,11 +120,11 @@ class Fluxus_Projects_Utils {
 		return null;
 	}
 
-	static public function compare_by_page_id( $page_1, $page_2 ) {
-    return $page_1->ID > $page_2->ID;
+	public static function compare_by_page_id( $page_1, $page_2 ) {
+		return $page_1->ID > $page_2->ID;
 	}
 
-	static public function compare_by_term_id( $term_a, $term_b ) {
+	public static function compare_by_term_id( $term_a, $term_b ) {
 		if ( $term_a->term_id > $term_b->term_id ) {
 			return 1;
 		} elseif ( $term_a->term_id < $term_b->term_id ) {

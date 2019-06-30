@@ -27,7 +27,7 @@ class Fluxus_Projects_Admin {
 
 	public function __construct( $plugin_name, $version ) {
 		$this->plugin_name = $plugin_name;
-		$this->version = $version;
+		$this->version     = $version;
 		$this->load_dependencies();
 	}
 
@@ -62,34 +62,34 @@ class Fluxus_Projects_Admin {
 		Fluxus_Projects_Deactivator::verify_dependencies();
 		global $pagenow;
 
-    $post_type = isset( $_GET[ 'post_type' ] ) ? $_GET[ 'post_type' ] : '';
+		$post_type = isset( $_GET['post_type'] ) ? $_GET['post_type'] : '';
 
-    if ( $post_id = Fluxus_Projects_Utils::post_id_from_query_params() ) {
-        $post = get_post( $post_id );
-        $post_type = $post->post_type;
-    }
+		if ( $post_id = Fluxus_Projects_Utils::post_id_from_query_params() ) {
+			$post      = get_post( $post_id );
+			$post_type = $post->post_type;
+		}
 
-    if ( $post_type == 'fluxus_portfolio' ) {
-        // Project List Page
-        if ( 'edit.php' == $pagenow ) {
+		if ( $post_type == 'fluxus_portfolio' ) {
+			// Project List Page
+			if ( 'edit.php' == $pagenow ) {
 					$fluxus_projects_wp_ui = new Fluxus_Projects_Wp_Ui();
 
 					// Custom columns in Project List
 					add_filter( 'manage_edit-fluxus_portfolio_columns', array( $fluxus_projects_wp_ui, 'list_columns' ) );
 					add_action( 'manage_posts_custom_column', array( $fluxus_projects_wp_ui, 'list_data' ) );
-        }
+			}
 
-        // Post Edit or Post New Page
-        if ( in_array( $pagenow, array( 'post.php', 'post-new.php', 'admin-ajax.php' ) ) ) {
+			// Post Edit or Post New Page
+			if ( in_array( $pagenow, array( 'post.php', 'post-new.php', 'admin-ajax.php' ) ) ) {
 					new Fluxus_Projects_Project_Admin( $post_id, $this->plugin_name, $this->version );
-        }
-    }
+			}
+		}
 
-    if ( $post_id ) {
+		if ( $post_id ) {
 			if ( get_page_template_slug( $post_id ) === 'template-portfolio-grid.php' ) {
 				new Fluxus_Projects_Grid_Admin( $post_id );
 			}
-    }
+		}
 	}
 
 	/**

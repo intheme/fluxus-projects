@@ -1,48 +1,48 @@
 <?php
 
 class Fluxus_Projects_Project extends Fluxus_Projects_Page {
-  protected $META_PREFIX = 'fluxus_project_';
-  protected $meta_data_defaults = array(
-		'subtitle' 			 => '',
-		'link'     			 => '',
-		'info'     			 => array(),
+	protected $META_PREFIX        = 'fluxus_project_';
+	protected $meta_data_defaults = array(
+		'subtitle'       => '',
+		'link'           => '',
+		'info'           => array(),
 		'other_projects' => 0,
-		'back_to_link' 	 => 0
-  );
+		'back_to_link'   => 0,
+	);
 
-  function get_featured_media() {
+	function get_featured_media() {
 		$meta_box = new Fluxus_Projects_Project_Media_Meta_Box( $this->post_id );
 		return $meta_box->get_featured_item();
-  }
+	}
 
-  function get_tags() {
+	function get_tags() {
 		return wp_get_post_terms( $this->post_id, 'fluxus-project-type' );
-  }
+	}
 
-  static function all( $args = array() ) {
+	static function all( $args = array() ) {
 		$defaults = array(
 			'post_type'      => 'fluxus_portfolio',
 			'posts_per_page' => -1,
 			'orderby'        => 'ID',
 			'post_status'    => 'any',
-			'order'          => 'DESC'
+			'order'          => 'DESC',
 		);
 
-		$args = array_merge( $defaults, $args );
+		$args  = array_merge( $defaults, $args );
 		$posts = get_posts( $args );
 
 		if ( $posts ) {
 			foreach ( $posts as $k => $post ) {
-				$posts[$k] = new Fluxus_Projects_Project( $post->ID );
+				$posts[ $k ] = new Fluxus_Projects_Project( $post->ID );
 			}
 
 			return $posts;
 		} else {
 			return array();
 		}
-  }
+	}
 
-  static function posts_to_projects( $posts ) {
+	static function posts_to_projects( $posts ) {
 		$projects = array();
 
 		if ( is_array( $posts ) ) {
@@ -54,9 +54,9 @@ class Fluxus_Projects_Project extends Fluxus_Projects_Page {
 		}
 
 		return $projects;
-  }
+	}
 
-  function get_back_link() {
+	function get_back_link() {
 		if ( $this->meta_back_to_link ) {
 			$project_type = get_term( $this->meta_back_to_link, 'fluxus-project-type' );
 
@@ -66,17 +66,17 @@ class Fluxus_Projects_Project extends Fluxus_Projects_Page {
 		}
 
 		return Fluxus_Projects::get_default_portfolio_permalink();
-  }
+	}
 
-  function get_other_projects( $number_to_display = 8, $slice_index = 1 ) {
+	function get_other_projects( $number_to_display = 8, $slice_index = 1 ) {
 		$args = array();
 
 		if ( $this->meta_other_projects ) {
 				$project_type = get_term( $this->meta_other_projects, 'fluxus-project-type' );
 
-				if ( $project_type ) {
-						$args[ 'fluxus-project-type' ] = $project_type->slug;
-				}
+			if ( $project_type ) {
+					$args['fluxus-project-type'] = $project_type->slug;
+			}
 		}
 
 		$all = fluxus_query_portfolio( $args );
@@ -117,5 +117,5 @@ class Fluxus_Projects_Project extends Fluxus_Projects_Page {
 		}
 
 		return self::posts_to_projects( array_slice( $all, $slice_offset, $number_to_display ) );
-  }
+	}
 }

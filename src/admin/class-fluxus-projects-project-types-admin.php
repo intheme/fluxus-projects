@@ -203,9 +203,9 @@ class Fluxus_Projects_Project_Types_Admin {
 	  </tr>
 		<?php
 		  /**
-       * This is needed for WPML plugin, it clones the last <tr />,
-       * where WPML shows it's UI. Our tr:last has display: none, what also hides WPML's user UI
-       */
+		   * This is needed for WPML plugin, it clones the last <tr />,
+		   * where WPML shows it's UI. Our tr:last has display: none, what also hides WPML's user UI
+		   */
 		?>
 	  <tr>
 		  <th></th>
@@ -219,7 +219,7 @@ class Fluxus_Projects_Project_Types_Admin {
 	 * Project Type Create Form
 	 */
 	public function create_form() {
-        $grod_options = new Fluxus_Projects_Project_Type_Grid_Admin( 0 );
+		$grod_options = new Fluxus_Projects_Project_Type_Grid_Admin( 0 );
 		?>
 	  <div class="form-field">
 		  <label for="project-type-layout"><?php _e( 'Layout', 'fluxus' ); ?></label>
@@ -232,12 +232,12 @@ class Fluxus_Projects_Project_Types_Admin {
 	  <div id="project-type-layout-option" class="form-field" style="display: none">
 		  <label for="project-type-grid-size"><?php _e( 'Grid Size', 'fluxus' ); ?></label>
 		  <select name="project-type-grid-size" id="project-type-grid-size">
-              <?php
-              echo it_array_to_select_options(
-                  $grod_options->get_grid_size_options(),
-                  Fluxus_Projects_Grid_Portfolio::DEFAULT_GRID_SIZE
-                  );
-                  ?>
+			  <?php
+				echo it_array_to_select_options(
+					$grod_options->get_grid_size_options(),
+					Fluxus_Projects_Grid_Portfolio::DEFAULT_GRID_SIZE
+				);
+				?>
 		  </select>
 	  </div>
 		<?php

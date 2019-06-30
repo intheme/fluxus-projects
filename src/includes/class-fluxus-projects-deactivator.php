@@ -39,27 +39,27 @@ class Fluxus_Projects_Deactivator {
 
 	public static function verify_dependencies() {
 		if ( ! class_exists( 'Media_Meta_Box_Interface' ) ) {
-			Fluxus_Projects_Deactivator::deactivate();
+			self::deactivate();
 			add_action( 'admin_notices', array( 'Fluxus_Projects_Deactivator', 'media_meta_box_missing_notice' ) );
-		} else if ( Media_Meta_Box_Interface::MAJOR_VERSION !== 1 ){
-			Fluxus_Projects_Deactivator::deactivate();
+		} elseif ( Media_Meta_Box_Interface::MAJOR_VERSION !== 1 ) {
+			self::deactivate();
 			add_action( 'admin_notices', array( 'Fluxus_Projects_Deactivator', 'media_meta_box_wrong_version_notice' ) );
 		}
 	}
 
 	public static function automatic_deactivation_notice() {
 		?>
-    <div class="notice notice-error is-dismissible">
-        <p><?php _e( 'Fluxus Projects plugin was automatically deactivated because Media Meta Box plugin is not active.', 'fluxus-projects' ); ?></p>
-    </div>
-    <?php
+	<div class="notice notice-error is-dismissible">
+		<p><?php _e( 'Fluxus Projects plugin was automatically deactivated because Media Meta Box plugin is not active.', 'fluxus-projects' ); ?></p>
+	</div>
+		<?php
 	}
 
 	public static function media_meta_box_wrong_version_notice() {
 		?>
-    <div class="notice notice-error is-dismissible">
-        <p><?php printf( esc_html__( 'Fluxus Projects plugin was automatically deactivated because Media Meta Box plugin has incorrect version Expected version 1.x, got %s.', 'fluxus-projects' ), Media_Meta_Box_Interface::VERSION ); ?></p>
-    </div>
-    <?php
+	<div class="notice notice-error is-dismissible">
+		<p><?php printf( esc_html__( 'Fluxus Projects plugin was automatically deactivated because Media Meta Box plugin has incorrect version Expected version 1.x, got %s.', 'fluxus-projects' ), Media_Meta_Box_Interface::VERSION ); ?></p>
+	</div>
+		<?php
 	}
 }

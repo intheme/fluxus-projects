@@ -15,7 +15,7 @@
  * @wordpress-plugin
  * Plugin Name:       Fluxus Projects
  * Plugin URI:        https://github.com/intheme/fluxus-projects
- * Description:       Portfolio projects manager for your Fluxus Wordpress Theme
+ * Description:       Portfolio projects manager for your Fluxus WordPress Theme
  * Version:           1.0.0
  * Author:            inTheme
  * Author URI:        https://inthe.me/

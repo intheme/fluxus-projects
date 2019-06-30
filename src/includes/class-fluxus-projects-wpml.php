@@ -24,14 +24,14 @@ class Fluxus_Projects_Wpml {
 	 *
 	 * @since    1.0.0
 	 */
-	static public function is_active() {
+	public static function is_active() {
 		global $sitepress;
-    return defined( 'ICL_LANGUAGE_CODE' ) && ICL_LANGUAGE_CODE && $sitepress;
-  }
+		return defined( 'ICL_LANGUAGE_CODE' ) && ICL_LANGUAGE_CODE && $sitepress;
+	}
 
-  static public function get_element_language( $id, $element_type ) {
-    global $sitepress;
-    return $sitepress->get_language_for_element( $id, $element_type );
-  }
+	public static function get_element_language( $id, $element_type ) {
+		global $sitepress;
+		return $sitepress->get_language_for_element( $id, $element_type );
+	}
 
 }

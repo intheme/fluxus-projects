@@ -227,37 +227,37 @@ class Fluxus_Projects {
 		 */
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/project-media/class-fluxus-projects-project-media-meta-box.php';
 
-    /**
-     * First we register taxonomy, then custom post type.
-     * The order is important, because of rewrite rules.
-     */
-    $args = array(
+		/**
+		 * First we register taxonomy, then custom post type.
+		 * The order is important, because of rewrite rules.
+		 */
+		$args = array(
 			'label'          => __( 'Project Types', 'fluxus-projects' ),
 			'singular_label' => __( 'Project Type', 'fluxus-projects' ),
 			'public'         => true,
 			'show_tagcloud'  => false,
 			'hierarchical'   => true,
-			'rewrite'        => false
+			'rewrite'        => false,
 		);
-		register_taxonomy( 'fluxus-project-type', 'fluxus_portfolio',  $args );
+		register_taxonomy( 'fluxus-project-type', 'fluxus_portfolio', $args );
 
 		/**
 		 * Register portfolio_project custom post type.
 		 */
 		$args = array(
-			'label'            => __( 'Portfolio', 'fluxus-projects' ),
-			'labels' => array(
+			'label'           => __( 'Portfolio', 'fluxus-projects' ),
+			'labels'          => array(
 				'singular_label' => __( 'Project', 'fluxus-projects' ),
 				'all_items'      => __( 'Projects', 'fluxus-projects' ),
 			),
-			'public'           => true,
-			'capability_type'  => 'page',
-			'rewrite'          => false,
-			'taxonomy'         => 'fluxus-project-type',
-			'menu_icon'        => 'dashicons-portfolio',
-			'supports'         => array( 'title', 'editor',  'excerpt',  'page-attributes' )
+			'public'          => true,
+			'capability_type' => 'page',
+			'rewrite'         => false,
+			'taxonomy'        => 'fluxus-project-type',
+			'menu_icon'       => 'dashicons-portfolio',
+			'supports'        => array( 'title', 'editor', 'excerpt', 'page-attributes' ),
 		);
-		register_post_type( 'fluxus_portfolio' , $args );
+		register_post_type( 'fluxus_portfolio', $args );
 
 		/**
 		 * Permalink structure
@@ -267,9 +267,9 @@ class Fluxus_Projects {
 
 		if ( Fluxus_Projects_Wpml::is_active() ) {
 			$languages = array_keys( icl_get_languages( 'skip_missing=0' ) );
-			$bases = array();
+			$bases     = array();
 			foreach ( $languages as $language ) {
-				$bases[$language] = self::get_default_portfolio_slug( $language );
+				$bases[ $language ] = self::get_default_portfolio_slug( $language );
 			}
 			$bases = array_unique( $bases );
 
@@ -300,28 +300,34 @@ class Fluxus_Projects {
 	}
 
 	public function order_fluxus_portfolio( $query ) {
-		$vars = $query->query_vars;
-    $is_projects_query = isset( $vars['post_type'] ) && ( $vars['post_type'] == 'fluxus_portfolio' );
-    $is_project_type_query = isset( $vars['fluxus-project-type'] ) && $vars['fluxus-project-type'];
+		$vars                  = $query->query_vars;
+		$is_projects_query     = isset( $vars['post_type'] ) && ( $vars['post_type'] == 'fluxus_portfolio' );
+		$is_project_type_query = isset( $vars['fluxus-project-type'] ) && $vars['fluxus-project-type'];
 
-    if ( $is_projects_query || $is_project_type_query ) {
-        // Set the default fluxus_portfolio order to menu_order ASC, ID DESC
-        if ( ! $query->get( 'orderby' ) ) {
-            $query->set( 'orderby', array( 'menu_order' => 'ASC', 'ID' => 'DESC' ) );
-				}
+		if ( $is_projects_query || $is_project_type_query ) {
+			// Set the default fluxus_portfolio order to menu_order ASC, ID DESC
+			if ( ! $query->get( 'orderby' ) ) {
+				$query->set(
+					'orderby',
+					array(
+						'menu_order' => 'ASC',
+						'ID'         => 'DESC',
+					)
+				);
+			}
 				$query->set( 'posts_per_page', -1 );
-    }
+		}
 	}
 
 	public function required_plugins() {
 		$plugins = array(
 			array(
-				'name'     => 'Media Meta Box',
-				'slug'     => 'media-meta-box',
-				'required' => true,
-				'source'   => 'http://miami.local/media-meta-box.zip',
-				'external_url' => 'http://miami.local/media-meta-box.zip'
-			)
+				'name'         => 'Media Meta Box',
+				'slug'         => 'media-meta-box',
+				'required'     => true,
+				'source'       => 'http://miami.local/media-meta-box.zip',
+				'external_url' => 'http://miami.local/media-meta-box.zip',
+			),
 		);
 
 		$config = array(
@@ -388,7 +394,7 @@ class Fluxus_Projects {
 	 * Returns slug of a page that has a 'Horizontal Portfolio' template assigned.
 	 * If no such page can be found, then 'portfolio' is returned.
 	 */
-	static public function get_default_portfolio_slug( $language = '' ) {
+	public static function get_default_portfolio_slug( $language = '' ) {
 		$portfolio_page = self::get_default_portfolio_page( $language );
 
 		if ( $portfolio_page ) {
@@ -407,9 +413,9 @@ class Fluxus_Projects {
 	 * @param string $language Return default portfolio page for a specific language.
 	 * @return mixed returns page object or FALSE if a page couldn't be found.
 	 */
-	static public function get_default_portfolio_page( $language = '' ) {
-		$cache_key = Fluxus_Projects_Utils::get_save_post_cache_key( 'portfolio-base-' . $language );
-		$found = false;
+	public static function get_default_portfolio_page( $language = '' ) {
+		$cache_key   = Fluxus_Projects_Utils::get_save_post_cache_key( 'portfolio-base-' . $language );
+		$found       = false;
 		$cached_data = wp_cache_get( $cache_key, 'fluxus-projects', false, $found );
 
 		if ( $found ) {

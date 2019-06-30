@@ -1,162 +1,160 @@
 <?php
 
 abstract class Fluxus_Projects_Page {
-  protected $post_id = null;
-  protected $meta_data = array();
-  protected $meta_data_defaults = array();
-  protected $meta_data_loaded = false;
-  protected $wp_post_object = null;
-  protected $META_PREFIX = '';
+	protected $post_id            = null;
+	protected $meta_data          = array();
+	protected $meta_data_defaults = array();
+	protected $meta_data_loaded   = false;
+	protected $wp_post_object     = null;
+	protected $META_PREFIX        = '';
 
-  function __construct( $page_id ) {
-    $this->post_id = $page_id;
-  }
+	function __construct( $page_id ) {
+		$this->post_id = $page_id;
+	}
 
-  function __set( $name, $value ) {
-    if ( 'meta_' == substr( $name, 0, 5 ) ) {
+	function __set( $name, $value ) {
+		if ( 'meta_' == substr( $name, 0, 5 ) ) {
 
-      // Load post meta data.
-      $this->fetch_post_meta();
+			// Load post meta data.
+			$this->fetch_post_meta();
 
-      $key = substr( $name, 5 );
+			$key = substr( $name, 5 );
 
-      // If this is a defined meta key
-      if ( isset( $this->meta_data_defaults[$key] ) ) {
+			// If this is a defined meta key
+			if ( isset( $this->meta_data_defaults[ $key ] ) ) {
 
-        // Call set_meta_$key if exists
-        if ( method_exists( $this, 'set_meta_' . $key ) ) {
-          call_user_func( array( $this, 'set_meta_' . $key ), $value );
-        } else {
-          // Set $this->meta_data array value
-          $this->meta_data[$key] = $value;
-        }
-      }
-    }
-  }
+				// Call set_meta_$key if exists
+				if ( method_exists( $this, 'set_meta_' . $key ) ) {
+					call_user_func( array( $this, 'set_meta_' . $key ), $value );
+				} else {
+					// Set $this->meta_data array value
+					$this->meta_data[ $key ] = $value;
+				}
+			}
+		}
+	}
 
-  function __get( $name ) {
-    if ( 'meta_' == substr( $name, 0, 5 ) ) {
+	function __get( $name ) {
+		if ( 'meta_' == substr( $name, 0, 5 ) ) {
 
-      $this->fetch_post_meta();
+			$this->fetch_post_meta();
 
-      $key = substr( $name, 5 );
+			$key = substr( $name, 5 );
 
-      // If this is a defined meta key
-      if ( isset( $this->meta_data_defaults[$key] ) ) {
-        // Call and return get_meta_$key() if exists
-        if ( method_exists( $this, 'get_meta_' . $key ) ) {
-          return call_user_func( array( $this, 'get_meta_' . $key ), $value );
-        // Return the value from $this->meta_data array()
-        } else {
-          if ( isset( $this->meta_data[$key]) ) {
-              return $this->meta_data[$key];
-          }
-        }
-      }
+			// If this is a defined meta key
+			if ( isset( $this->meta_data_defaults[ $key ] ) ) {
+				// Call and return get_meta_$key() if exists
+				if ( method_exists( $this, 'get_meta_' . $key ) ) {
+					return call_user_func( array( $this, 'get_meta_' . $key ), $value );
+					// Return the value from $this->meta_data array()
+				} else {
+					if ( isset( $this->meta_data[ $key ] ) ) {
+						return $this->meta_data[ $key ];
+					}
+				}
+			}
+		} elseif ( method_exists( $this, 'get_' . $name ) ) {
 
-    } elseif ( method_exists( $this, 'get_' . $name ) ) {
+				return call_user_func( array( $this, 'get_' . $name ) );
 
-      return call_user_func( array( $this, 'get_' . $name ) );
+		}
+	}
 
-    }
-  }
+	function metadata() {
+		return $this->meta_data;
+	}
 
-  function metadata() {
-    return $this->meta_data;
-  }
+	/**
+	 * Load WP post object.
+	 */
+	function fetch_post() {
+		if ( null === $this->wp_post_object ) {
+			$this->wp_post_object = get_post( $this->post_id );
 
-  /**
-   * Load WP post object.
-   */
-  function fetch_post() {
-    if ( null === $this->wp_post_object ) {
-      $this->wp_post_object = get_post( $this->post_id );
+			// get_post() returns null on failure.
+			if ( ! $this->wp_post_object ) {
+				$this->wp_post_object = false;
+			}
+		}
 
-      // get_post() returns null on failure.
-      if ( ! $this->wp_post_object ) {
-        $this->wp_post_object = false;
-      }
-    }
+		return $this;
+	}
 
-    return $this;
-  }
+	/**
+	 * Loads post's meta fields.
+	 */
+	function fetch_post_meta() {
+		if ( false == $this->meta_data_loaded ) {
+			$this->meta_data_loaded = true;
+			foreach ( $this->meta_data_defaults as $key => $value ) {
 
-  /**
-   * Loads post's meta fields.
-   */
-  function fetch_post_meta() {
-    if ( false == $this->meta_data_loaded ) {
-      $this->meta_data_loaded = true;
-      foreach ( $this->meta_data_defaults as $key => $value ) {
+				if ( metadata_exists( 'post', $this->post_id, $this->META_PREFIX . $key ) ) {
+					$this->meta_data[ $key ] = get_post_meta( $this->post_id, $this->META_PREFIX . $key, true );
+				} else {
+					$this->meta_data[ $key ] = $this->meta_data_defaults[ $key ];
+				}
+			}
+		}
 
-        if ( metadata_exists( 'post', $this->post_id, $this->META_PREFIX . $key) ) {
-          $this->meta_data[$key] = get_post_meta( $this->post_id, $this->META_PREFIX . $key, true );
-        } else {
-          $this->meta_data[$key] = $this->meta_data_defaults[$key];
-        }
+		return $this;
+	}
 
-      }
-    }
+	/**
+	 * Return post object.
+	 */
+	function get_post() {
+		return $this->fetch_post()->wp_post_object;
+	}
 
-    return $this;
-  }
+	function get_post_id() {
+		return $this->post_id;
+	}
 
-  /**
-   * Return post object.
-   */
-  function get_post() {
-    return $this->fetch_post()->wp_post_object;
-  }
+	/**
+	 * Check if post object exists.
+	 */
+	function exists() {
+		return (bool) $this->fetch_post()->wp_post_object;
+	}
 
-  function get_post_id() {
-    return $this->post_id;
-  }
+	function save() {
+		if ( $this->wp_post_object ) {
+			wp_update_post( $this->wp_post_object );
+		}
 
-  /**
-   * Check if post object exists.
-   */
-  function exists() {
-    return (bool) $this->fetch_post()->wp_post_object;
-  }
+		$this->fetch_post_meta();
 
-  function save() {
-    if ( $this->wp_post_object ) {
-      wp_update_post( $this->wp_post_object );
-    }
+		foreach ( $this->meta_data_defaults as $key => $value ) {
+			$value = isset( $this->meta_data[ $key ] ) ? $this->meta_data[ $key ] : $value;
+			update_post_meta( $this->post_id, $this->META_PREFIX . $key, $value );
+		}
 
-    $this->fetch_post_meta();
+		return $this;
+	}
 
-    foreach ( $this->meta_data_defaults as $key => $value ) {
-      $value = isset( $this->meta_data[$key] ) ? $this->meta_data[$key] : $value;
-      update_post_meta( $this->post_id, $this->META_PREFIX . $key, $value );
-    }
+	function delete() {
+		$this->fetch_post();
+		return wp_delete_post( $this->post_id, true );
+	}
 
-    return $this;
-  }
+	function update_from_array( $array, $key_prefix = true ) {
+		if ( $key_prefix === true ) {
+			$key_prefix = $this->META_PREFIX;
+		}
 
-  function delete() {
-    $this->fetch_post();
-    return wp_delete_post( $this->post_id, true );
-  }
+		if ( $key_prefix === false ) {
+			$key_prefix = '';
+		}
 
-  function update_from_array( $array, $key_prefix = true ) {
-    if ( $key_prefix === true ) {
-      $key_prefix = $this->META_PREFIX;
-    }
+		foreach ( $this->meta_data_defaults as $key => $value ) {
+			$array_key = $key_prefix . $key;
 
-    if ( $key_prefix === false ) {
-      $key_prefix = '';
-    }
+			if ( isset( $array[ $array_key ] ) ) {
+				$key        = 'meta_' . $key;
+				$this->$key = $array[ $array_key ];
+			}
+		}
 
-    foreach ( $this->meta_data_defaults as $key => $value ) {
-      $array_key = $key_prefix . $key;
-
-      if ( isset( $array[$array_key] ) ) {
-        $key = 'meta_' . $key;
-        $this->$key = $array[$array_key];
-      }
-    }
-
-    return $this;
-  }
+		return $this;
+	}
 }

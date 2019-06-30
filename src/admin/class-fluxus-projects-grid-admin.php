@@ -14,7 +14,7 @@ class Fluxus_Projects_Grid_Admin {
 			'low'
 		);
 
-		add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_scripts' ));
+		add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_scripts' ) );
 		add_action( 'save_post', array( $this, 'admin_options_save' ), 2 );
 	}
 
@@ -22,18 +22,18 @@ class Fluxus_Projects_Grid_Admin {
 	public function get_orientation_options() {
 		return array(
 			'horizontal' => __( 'Horizontal', 'fluxus' ),
-			'vertical'   => __( 'Vertical', 'fluxus' )
+			'vertical'   => __( 'Vertical', 'fluxus' ),
 		);
 	}
 
 	public function get_aspect_ratio_options() {
 		$options = array(
-				'auto'   => __( 'Auto', 'fluxus' ),
-				'1:1'    => __( '1:1 (square)', 'fluxus' ),
-				'4:3'    => '4:3',
-				'2:1'    => '2:1',
-				'16:9'   => '16:9',
-				'9:16'   => '9:16',
+			'auto' => __( 'Auto', 'fluxus' ),
+			'1:1'  => __( '1:1 (square)', 'fluxus' ),
+			'4:3'  => '4:3',
+			'2:1'  => '2:1',
+			'16:9' => '16:9',
+			'9:16' => '9:16',
 		);
 
 		return apply_filters( 'fluxus_portfolio_aspect_ratio', $options );
@@ -45,7 +45,7 @@ class Fluxus_Projects_Grid_Admin {
 			'5 3' => __( '5 columns, 3 rows', 'fluxus' ),
 			'4 3' => __( '4 columns, 3 rows', 'fluxus' ),
 			'3 3' => __( '3 columns, 3 rows', 'fluxus' ),
-			'3 2' => __( '3 columns, 2 rows', 'fluxus' )
+			'3 2' => __( '3 columns, 2 rows', 'fluxus' ),
 		);
 
 		return apply_filters( 'fluxus_portfolio_grid_sizes', $size_options );
@@ -63,7 +63,7 @@ class Fluxus_Projects_Grid_Admin {
 						'customize-layout',
 						1,
 						get_permalink( $this->post_id )
-					)
+					),
 			)
 		);
 	}

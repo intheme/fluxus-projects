@@ -9,7 +9,7 @@ class Fluxus_Projects_Project_Type_Grid_Admin extends Fluxus_Projects_Grid_Admin
 		parent::__construct( 0 );
 
 		$this->term_id = $term_id;
-		$this->term = get_term( $term_id, 'fluxus-project-type' );
+		$this->term    = get_term( $term_id, 'fluxus-project-type' );
 		$this->options = new Fluxus_Projects_Project_Type_Options( $term_id );
 	}
 
@@ -38,15 +38,15 @@ class Fluxus_Projects_Project_Type_Grid_Admin extends Fluxus_Projects_Grid_Admin
 			$url = get_term_link( $this->term );
 
 			$options = array(
-				'orientation'								=> $this->options->grid_orientation,
-				'aspect_ratio'							=> $this->options->grid_aspect_ratio,
-				'grid_size'     						=> $this->options->grid_size,
-				'image_sizes_serialized' 		=> $this->options->grid_image_sizes,
+				'orientation'               => $this->options->grid_orientation,
+				'aspect_ratio'              => $this->options->grid_aspect_ratio,
+				'grid_size'                 => $this->options->grid_size,
+				'image_sizes_serialized'    => $this->options->grid_image_sizes,
 				'image_cropping_serialized' => $this->options->grid_image_cropping,
-				'customize_url' 						=> add_query_arg( 'customize-layout', 1, $url )
+				'customize_url'             => add_query_arg( 'customize-layout', 1, $url ),
 			);
 
-			$options['image_sizes'] = Fluxus_Projects_Grid_Portfolio::parse_image_sizes(
+			$options['image_sizes']    = Fluxus_Projects_Grid_Portfolio::parse_image_sizes(
 				$options['image_sizes_serialized']
 			);
 			$options['image_cropping'] = json_decode(

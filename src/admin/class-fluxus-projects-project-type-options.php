@@ -3,12 +3,12 @@
 class Fluxus_Projects_Project_Type_Options {
 	protected $id;
 	protected $options = array(
-		'layout' 					    => '',
+		'layout'              => '',
 		'grid_orientation'    => '',
 		'grid_aspect_ratio'   => '',
-		'grid_size' 					=> '',
+		'grid_size'           => '',
 		'grid_image_sizes'    => '',
-		'grid_image_cropping' => ''
+		'grid_image_cropping' => '',
 	);
 
 	function __construct( $project_type_term_id ) {

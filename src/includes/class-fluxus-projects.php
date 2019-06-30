@@ -178,6 +178,7 @@ class Fluxus_Projects {
 
 		$this->loader->add_action( 'admin_enqueue_scripts', $plugin_admin, 'enqueue_styles' );
 		$this->loader->add_action( 'admin_init', $plugin_admin, 'admin_init' );
+		$this->loader->add_action( 'save_post', 'Fluxus_Projects_Utils', 'fluxus_clear_save_post_cache', 10, 1 );
 	}
 
 	/**

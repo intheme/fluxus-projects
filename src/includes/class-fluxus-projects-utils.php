@@ -51,7 +51,20 @@ class Fluxus_Projects_Utils {
     }
 
     return $cache_key . ':' . $namespace;
-  }
+	}
+
+	static function fluxus_clear_save_post_cache( $post_id ) {
+    if ( defined('DOING_AUTOSAVE') && DOING_AUTOSAVE ) {
+			return;
+    }
+
+    if ( wp_is_post_revision( $post_id ) ) {
+			return;
+    }
+
+    self::flush_rewrite_rules();
+    wp_cache_incr( 'fluxus_save_post_cache_key' );
+	}
 
   /**
    * Return posts that match given template filename

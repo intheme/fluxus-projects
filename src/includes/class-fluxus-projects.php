@@ -192,6 +192,8 @@ class Fluxus_Projects {
 
 		$this->loader->add_action( 'wp_enqueue_scripts', $plugin_public, 'enqueue_styles' );
 		$this->loader->add_action( 'wp_enqueue_scripts', $plugin_public, 'enqueue_scripts' );
+		$this->loader->add_action( 'term_link', $plugin_public, 'project_type_permalink', 10, 3 );
+		$this->loader->add_action( 'post_type_link', $plugin_public, 'portfolio_permalink', 10, 3 );
 	}
 
 	private function define_hooks() {
@@ -265,12 +267,13 @@ class Fluxus_Projects {
 		}
 
 		$base = self::get_default_portfolio_slug();
+
 		add_permastruct( 'fluxus-project-type', "{$base}/%fluxus-project-type%", false );
 		add_permastruct( 'fluxus_portfolio', "{$base}/%fluxus-project-type%/%fluxus_portfolio%", false );
 		add_permastruct( 'fluxus-project-type-default', 'portfolio/%fluxus-project-type%', false );
 		add_permastruct( 'fluxus_portfolio-default', 'portfolio/%fluxus-project-type%/%fluxus_portfolio%', false );
 
-		if ( isset( $_GET['fluxus-action'] ) && ( $_GET['fluxus-action'] == 'flush' ) && is_admin() ) {
+		if ( isset( $_GET['fluxus-projects-action'] ) && ( $_GET['fluxus-projects-action'] == 'flush' ) && is_admin() ) {
 			Fluxus_Projects_Utils::flush_rewrite_rules();
 		}
 

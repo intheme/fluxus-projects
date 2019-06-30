@@ -111,4 +111,14 @@ class Fluxus_Projects_Utils {
     return $page_1->ID > $page_2->ID;
 	}
 
+	static public function compare_by_term_id( $term_a, $term_b ) {
+		if ( $term_a->term_id > $term_b->term_id ) {
+			return 1;
+		} elseif ( $term_a->term_id < $term_b->term_id ) {
+			return -1;
+		} else {
+			return 0;
+		}
+	}
+
 }

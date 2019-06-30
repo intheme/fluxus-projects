@@ -21,7 +21,7 @@
   },
   "scripts": {
     "sniffs": "phpcs --standard=Wordpress src/",
-    "fixes": "php-cs-fixer fix src/",
+    "fixes": "phpcbf --standard=Wordpress src/",
     "lints": "parallel-lint ./src  --blame --exclude vendor"
   }
 }

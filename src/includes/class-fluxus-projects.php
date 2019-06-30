@@ -149,6 +149,11 @@ class Fluxus_Projects {
 		 */
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/widgets/class-fluxus-projects-project-types-widget.php';
 
+		/**
+		 * Project Types admin UI
+		 */
+		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'admin/class-fluxus-projects-project-types-admin.php';
+
 		$this->loader = new Fluxus_Projects_Loader();
 	}
 
@@ -179,6 +184,13 @@ class Fluxus_Projects {
 		$this->loader->add_action( 'admin_enqueue_scripts', $plugin_admin, 'enqueue_styles' );
 		$this->loader->add_action( 'admin_init', $plugin_admin, 'admin_init' );
 		$this->loader->add_action( 'save_post', 'Fluxus_Projects_Utils', 'fluxus_clear_save_post_cache', 10, 1 );
+
+		$project_types_admin = new Fluxus_Projects_Project_Types_Admin();
+		$this->loader->add_action( 'delete_fluxus-project-type', $project_types_admin, 'delete', 10, 1 );
+		$this->loader->add_action( 'edit_fluxus-project-type', $project_types_admin, 'update', 10, 1 );
+		$this->loader->add_action( 'create_fluxus-project-type', $project_types_admin, 'update', 10, 1 );
+		$this->loader->add_action( 'fluxus-project-type_edit_form_fields', $project_types_admin, 'edit_form', 10, 1 );
+		$this->loader->add_action( 'fluxus-project-type_add_form_fields', $project_types_admin, 'create_form', 10, 1 );
 	}
 
 	/**

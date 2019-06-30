@@ -33,14 +33,29 @@ class Fluxus_Projects_Admin {
 
 	private function load_dependencies() {
 		/**
-		 * Class that extends WP admin UI with few elements for displaying fluxus_portfolio
+		 * Shows extra column information in Portfolio > Index view
 		 */
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'admin/class-fluxus-projects-wp-ui.php';
 
 		/**
-		 * Class responsible for showing project page options.
+		 * Project page options.
 		 */
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'admin/class-fluxus-projects-project-admin.php';
+
+		/**
+		 * Project type options.
+		 */
+		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'admin/class-fluxus-projects-project-type-options.php';
+
+		/**
+		 * Grid options.
+		 */
+		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'admin/class-fluxus-projects-grid-admin.php';
+
+		/**
+		 * Project type grid options.
+		 */
+		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'admin/class-fluxus-projects-project-type-grid-admin.php';
 	}
 
 	public function admin_init() {
@@ -72,8 +87,7 @@ class Fluxus_Projects_Admin {
 
     if ( $post_id ) {
 			if ( get_page_template_slug( $post_id ) === 'template-portfolio-grid.php' ) {
-				require_once plugin_dir_path( __FILE__ ) . 'class-fluxus-projects-grid-portfolio-admin.php';
-				new Fluxus_Projects_Grid_Portfolio_Admin( $post_id, $this->plugin_name, $this->version );
+				new Fluxus_Projects_Grid_Admin( $post_id );
 			}
     }
 	}

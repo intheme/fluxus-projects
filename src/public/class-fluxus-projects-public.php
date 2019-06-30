@@ -103,7 +103,7 @@ class Fluxus_Projects_Public {
 	/**
 	 * Generates correct Project Type links when WPML is active.
 	 */
-	public function project_type_permalink() {
+	public function project_type_permalink( $termlink, $term, $taxonomy ) {
     /**
      * Don't replace anything if it's not a fluxus-project-type taxonomy,
      * if there was an error or we are not using fancy links.

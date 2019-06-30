@@ -1,14 +1,12 @@
 <?php
 
-class Fluxus_Projects_Grid_Portfolio_Admin {
-	function __construct( $post_id, $plugin_name, $version ) {
+class Fluxus_Projects_Grid_Admin {
+	function __construct( $post_id ) {
 		$this->post_id = $post_id;
-		$this->plugin_name = $plugin_name;
-		$this->version = $version;
 
 		// Add options meta box
 		add_meta_box(
-			$this->plugin_name . '-grid-meta',
+			FLUXUS_PROJECTS_PLUGIN_NAME . '-grid-meta',
 			__( 'Grid Options', 'fluxus' ),
 			array( $this, 'admin_options_content' ),
 			'page',
@@ -154,10 +152,10 @@ class Fluxus_Projects_Grid_Portfolio_Admin {
 
 	public function enqueue_scripts() {
 		wp_enqueue_script(
-			$this->plugin_name . '-grid-page-edit',
+			FLUXUS_PROJECTS_PLUGIN_NAME . '-grid-page-edit',
 			plugin_dir_url( __FILE__ ) . 'js/fluxs-projects-grid-page-edit.js',
 			array( 'jquery', 'backbone' ),
-			$this->version,
+			FLUXUS_PROJECTS_VERSION,
 			false
 		);
 	}

@@ -1,5 +1,4 @@
 <?php
-
 /**
  * The public-facing functionality of the plugin.
  *
@@ -102,6 +101,10 @@ class Fluxus_Projects_Public {
 
 	/**
 	 * Generates correct Project Type links when WPML is active.
+	 *
+	 * @param $termlink URL
+	 * @param $term term
+	 * @param $taxonomy taxonomy
 	 */
 	public function project_type_permalink( $termlink, $term, $taxonomy ) {
 		/**

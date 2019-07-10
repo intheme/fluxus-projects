@@ -79,7 +79,13 @@ class Fluxus_Projects_Project extends Fluxus_Projects_Page {
 			}
 		}
 
-		$all = fluxus_query_portfolio( $args );
+		$all = query_posts(
+			array(
+				'post_type'          => 'fluxus_portfolio',
+				'posts_per_page'     => -1,
+				'post_status'        => 'publish',
+			)
+		);
 		wp_reset_query();
 
 		$count = count( $all );

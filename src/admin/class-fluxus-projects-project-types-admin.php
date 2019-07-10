@@ -100,7 +100,7 @@ class Fluxus_Projects_Project_Types_Admin {
 	}
 
 
-	public function fluxus_project_type_layout( $project_type_id ) {
+	public static function fluxus_project_type_layout( $project_type_id ) {
 		$options = new Fluxus_Projects_Project_Type_Options( $project_type_id );
 
 		$template = $options->layout;
@@ -143,12 +143,12 @@ class Fluxus_Projects_Project_Types_Admin {
 
 				$template = 'template-portfolio.php';
 
-				$horizontal_portfolio = it_find_page_by_template( 'template-portfolio.php', array( 'post_status' => 'publish' ) );
+				$horizontal_portfolio = Fluxus_Projects_Utils::get_pages_by_template( 'template-portfolio.php', array( 'post_status' => 'publish' ) );
 
 				if ( $horizontal_portfolio ) {
 					$template = 'template-portfolio.php';
 				} else {
-					$grid_portfolio = it_find_page_by_template( 'template-portfolio-grid.php', array( 'post_status' => 'publish' ) );
+					$grid_portfolio = Fluxus_Projects_Utils::get_pages_by_template( 'template-portfolio-grid.php', array( 'post_status' => 'publish' ) );
 
 					if ( $grid_portfolio ) {
 						$template = 'template-portfolio-grid.php';

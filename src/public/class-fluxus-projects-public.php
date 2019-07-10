@@ -51,6 +51,22 @@ class Fluxus_Projects_Public {
 		$this->plugin_name = $plugin_name;
 		$this->version     = $version;
 
+		$this->load_dependencies();
+
+	}
+
+	/**
+	 * Load various files that can be used publicly
+	 *
+	 * @return void
+	 */
+	private function load_dependencies() {
+
+		/**
+		 * Project Types management
+		 */
+		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'public/class-fluxus-projects-project-type.php';
+
 	}
 
 	/**
@@ -102,9 +118,9 @@ class Fluxus_Projects_Public {
 	/**
 	 * Generates correct Project Type links when WPML is active.
 	 *
-	 * @param $termlink URL
-	 * @param $term term
-	 * @param $taxonomy taxonomy
+	 * @param string   $termlink URL.
+	 * @param Term     $term term object.
+	 * @param Taxonomy $taxonomy taxonomy object.
 	 */
 	public function project_type_permalink( $termlink, $term, $taxonomy ) {
 		/**
@@ -131,6 +147,10 @@ class Fluxus_Projects_Public {
 
 	/**
 	 * Generates links to portfolio projects.
+	 *
+	 * @param string  $permalink URL.
+	 * @param WP_Post $post post object for which to generate URL.
+	 * @param boolean $leavename Should leave name.
 	 */
 	public function portfolio_permalink( $permalink, $post, $leavename ) {
 		/**

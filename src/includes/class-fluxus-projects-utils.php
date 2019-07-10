@@ -69,10 +69,12 @@ class Fluxus_Projects_Utils {
 	/**
 	 * Return posts that match given template filename
 	 */
-	public static function it_find_page_by_template( $template_filename, $args = array() ) {
+	public static function get_pages_by_template( $template_filename, $args = array() ) {
 		$defaults = array(
 			'post_type'      => 'page',
 			'posts_per_page' => -1,
+			'orderby'        => 'ID',
+			'order'          => 'asc',
 			'meta_query'     => array(
 				array(
 					'key'     => '_wp_page_template',
@@ -80,8 +82,6 @@ class Fluxus_Projects_Utils {
 					'compare' => '=',
 				),
 			),
-			'orderby'        => 'ID',
-			'order'          => 'asc',
 		);
 
 		$args = wp_parse_args( $args, $defaults );

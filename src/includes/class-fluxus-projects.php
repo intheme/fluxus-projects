@@ -422,10 +422,10 @@ class Fluxus_Projects {
 			return $cached_data;
 		}
 
-		$horizontal_portfolios = Fluxus_Projects_Utils::it_find_page_by_template( 'template-portfolio.php' );
+		$horizontal_portfolios = Fluxus_Projects_Utils::get_pages_by_template( 'template-portfolio.php' );
 		$horizontal_portfolios = empty( $horizontal_portfolios ) ? array() : $horizontal_portfolios;
 
-		$grid_portfolios = Fluxus_Projects_Utils::it_find_page_by_template( 'template-portfolio-grid.php' );
+		$grid_portfolios = Fluxus_Projects_Utils::get_pages_by_template( 'template-portfolio-grid.php' );
 		$grid_portfolios = empty( $grid_portfolios ) ? array() : $grid_portfolios;
 
 		$portfolios = array_merge( $horizontal_portfolios, $grid_portfolios );

@@ -81,9 +81,9 @@ class Fluxus_Projects_Project extends Fluxus_Projects_Page {
 
 		$all = query_posts(
 			array(
-				'post_type'          => 'fluxus_portfolio',
-				'posts_per_page'     => -1,
-				'post_status'        => 'publish',
+				'post_type'      => 'fluxus_portfolio',
+				'posts_per_page' => -1,
+				'post_status'    => 'publish',
 			)
 		);
 		wp_reset_query();

@@ -36,7 +36,7 @@ class Fluxus_Projects_Grid_Portfolio extends Fluxus_Projects_Page {
 
 	static function grid_options( $page_id = null ) {
 		if ( ! $page_id ) {
-			$default_grid_portfolio = it_find_page_by_template(
+			$default_grid_portfolio = Fluxus_Projects_Utils::get_pages_by_template(
 				'template-portfolio-grid.php',
 				array(
 					'post_status' => 'publish',

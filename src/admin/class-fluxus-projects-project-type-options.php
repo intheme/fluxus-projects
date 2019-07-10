@@ -11,12 +11,12 @@ class Fluxus_Projects_Project_Type_Options {
 		'grid_image_cropping' => '',
 	);
 
-	function __construct( $project_type_term_id ) {
+	public function __construct( $project_type_term_id ) {
 		$this->id = $project_type_term_id;
 		return $this;
 	}
 
-	function __set( $name, $value ) {
+	public function __set( $name, $value ) {
 		if ( isset( $this->options[ $name ] ) ) {
 			$this->options[ $name ] = $value;
 			update_option( 'project_type_' . $name . '_' . $this->id, $value );
@@ -24,13 +24,13 @@ class Fluxus_Projects_Project_Type_Options {
 		}
 	}
 
-	function __get( $name ) {
+	public function __get( $name ) {
 		if ( isset( $this->options[ $name ] ) ) {
 			return get_option( 'project_type_' . $name . '_' . $this->id );
 		}
 	}
 
-	function delete() {
+	public function delete() {
 		delete_option( 'project_type_grid_size_' . $this->id );
 		delete_option( 'project_type_layout_' . $this->id );
 	}

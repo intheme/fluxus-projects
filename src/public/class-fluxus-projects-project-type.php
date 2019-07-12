@@ -72,4 +72,71 @@ class Fluxus_Projects_Project_Type {
 
 		return $template;
 	}
+
+	public function get_grid_options() {
+		$options = array(
+			'columns' => 4,
+			'rows'    => 3,
+		);
+
+		$grid_size = $this->get_option( 'grid_size' );
+		$grid_size = explode( ' ', $grid_size );
+		if ( is_array( $grid_size ) && count( $grid_size ) == 2 ) {
+			$options['columns'] = $grid_size[0];
+			$options['rows']    = $grid_size[1];
+		}
+
+		$grid_orientation = $this->get_option( 'grid_orientation' );
+		if ( $grid_orientation ) {
+			$options['orientation'] = $grid_orientation;
+		}
+
+		$grid_aspect_ratio = $this->get_option( 'grid_aspect_ratio' );
+		if ( $grid_aspect_ratio ) {
+			$options['aspect_ratio'] = $grid_aspect_ratio;
+		}
+
+		$grid_image_sizes = $this->get_option( 'grid_image_sizes' );
+		if ( $grid_image_sizes ) {
+			$options['image_sizes_serialized'] = $grid_image_sizes;
+			$options['image_sizes']            = GridPortfolio::parse_image_sizes( $grid_image_sizes );
+		} else {
+			$options['image_sizes_serialized'] = '';
+			$options['image_sizes']            = array();
+		}
+
+		$grid_image_cropping = $this->get_option( 'grid_image_cropping' );
+		if ( $grid_image_cropping ) {
+			$options['image_cropping_serialized'] = $grid_image_cropping;
+			$options['image_cropping']            = json_decode( $grid_image_cropping, true );
+		} else {
+			$options['image_cropping_serialized'] = '';
+			$options['image_cropping']            = array();
+		}
+
+		return $options;
+
+	}
+
+	private function get_option( $option_name ) {
+		$options = new Fluxus_Projects_Project_Type_Options(
+			$this->project_type_id
+		);
+		$value   = $options->$option_name;
+
+		// If value is not set then try to inherit from parent Project Type
+		if ( $value === false ) {
+			$project_type = get_term_by(
+				'id',
+				$this->project_type_id,
+				'fluxus-project-type'
+			);
+
+			if ( $project_type->parent ) {
+				return $this->get_option( $project_type->parent, $option_name );
+			}
+		}
+
+		return $value;
+	}
 }

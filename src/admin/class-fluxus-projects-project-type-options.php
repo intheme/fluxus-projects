@@ -13,7 +13,6 @@ class Fluxus_Projects_Project_Type_Options {
 
 	public function __construct( $project_type_term_id ) {
 		$this->id = $project_type_term_id;
-		return $this;
 	}
 
 	public function __set( $name, $value ) {
@@ -21,12 +20,16 @@ class Fluxus_Projects_Project_Type_Options {
 			$this->options[ $name ] = $value;
 			update_option( 'project_type_' . $name . '_' . $this->id, $value );
 			return $this;
+		} else {
+			throw new Error( "Unknown option {$name}" );
 		}
 	}
 
 	public function __get( $name ) {
 		if ( isset( $this->options[ $name ] ) ) {
 			return get_option( 'project_type_' . $name . '_' . $this->id );
+		} else {
+			throw new Error( "Unknown option {$name}" );
 		}
 	}
 

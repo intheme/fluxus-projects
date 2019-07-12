@@ -99,7 +99,9 @@ class Fluxus_Projects_Project_Type {
 		$grid_image_sizes = $this->get_option( 'grid_image_sizes' );
 		if ( $grid_image_sizes ) {
 			$options['image_sizes_serialized'] = $grid_image_sizes;
-			$options['image_sizes']            = GridPortfolio::parse_image_sizes( $grid_image_sizes );
+			$options['image_sizes']            = Fluxus_Projects_Grid_Portfolio::parse_image_sizes(
+				$grid_image_sizes
+			);
 		} else {
 			$options['image_sizes_serialized'] = '';
 			$options['image_sizes']            = array();

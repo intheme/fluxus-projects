@@ -171,7 +171,7 @@ class Fluxus_Projects_Project_Types_Admin {
 		  </th>
 		  <td>
 			  <?php
-				it_select_tag(
+				Fluxus_Projects_Utils::select_tag(
 					array(
 						'name' => 'project-type-layout',
 						'id'   => 'project-type-layout',

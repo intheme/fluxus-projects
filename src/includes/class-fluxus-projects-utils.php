@@ -134,4 +134,78 @@ class Fluxus_Projects_Utils {
 		}
 	}
 
+	public static function select_tag( $attrs = array(), $options = array(), $active = false ) {
+		echo '<select ' . self::array_to_attributes( $attrs ) . '>' .
+			self::array_to_select_options( $options, $active ) .
+		'</select>';
+	}
+
+	public static function array_to_select_options( $array, $active = '' ) {
+		$html = '';
+
+		foreach ( $array as $value => $label ) {
+			$selected = $active == $value ? ' selected="selected"' : '';
+			$html    .= '<option value="' . esc_attr( $value ) . '"' . $selected . '>' .
+				$label .
+			'</option>';
+		}
+
+		return $html;
+	}
+
+	public static function array_to_attributes( $array ) {
+		$html = '';
+
+		foreach ( $array as $attr => $value ) {
+			if ( ! is_array( $value ) ) {
+				$value = array( $value );
+			}
+
+			if ( 'style' == $attr ) {
+				$html .= ' style="' . esc_attr( join( '; ', $value ) ) . '"';
+				continue;
+			}
+
+			if ( 'class' == $attr ) {
+				$html .= ' class="' . esc_attr( self::classnames( $value ) ) . '"';
+				continue;
+			}
+
+			if ( $value[0] === null ) {
+				$html .= ' ' . esc_attr( $attr );
+			} else {
+				$html .= ' ' . esc_attr( $attr ) . '="' . esc_attr( join( ' ', $value ) ) . '"';
+			}
+		}
+
+		return $html;
+	}
+
+	/**
+	 * Returns contents of HTML class="" attribute.
+	 * Inspired by classNames JS library.
+	 */
+	public static function classnames( $array ) {
+		$css_classes = array();
+
+		foreach ( $array as $key => $value ) {
+			if ( is_array( $value ) ) {
+				$css_classes = array_merge( $css_classes, explode( ' ', self::classnames( $value ) ) );
+			} elseif ( is_integer( $key ) ) {
+				$css_classes = array_merge( $css_classes, explode( ' ', $value ) );
+			} elseif ( is_string( $key ) && is_bool( $value ) ) {
+				if ( $value ) {
+					$css_classes[] = $key;
+				}
+			} else {
+				$value_type = gettype( $value );
+				throw new Exception(
+					"Unknown type provided to 'classnames': '$value_type'"
+				);
+			}
+		}
+
+		return join( ' ', array_unique( $css_classes ) );
+	}
+
 }

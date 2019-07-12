@@ -150,10 +150,10 @@ class Fluxus_Projects_Grid_Admin {
 		$grid->update_from_array( stripslashes_deep( $_POST ) )->save();
 	}
 
-	public function enqueue_scripts() {
+	public static function enqueue_scripts() {
 		wp_enqueue_script(
 			FLUXUS_PROJECTS_PLUGIN_NAME . '-grid-page-edit',
-			plugin_dir_url( __FILE__ ) . 'js/fluxs-projects-grid-page-edit.js',
+			plugin_dir_url( __FILE__ ) . 'js/fluxus-projects-grid-page-edit.js',
 			array( 'jquery', 'backbone' ),
 			FLUXUS_PROJECTS_VERSION,
 			false

@@ -90,6 +90,18 @@ class Fluxus_Projects_Admin {
 				new Fluxus_Projects_Grid_Admin( $post_id );
 			}
 		}
+
+		/**
+		 * Project Types admin
+		 */
+		$is_project_type_admin = isset( $_REQUEST['taxonomy'] ) &&
+			$_REQUEST['taxonomy'] === 'fluxus-project-type';
+		if ( $is_project_type_admin ) {
+			add_action(
+				'admin_enqueue_scripts',
+				array( 'Fluxus_Projects_Grid_Admin', 'enqueue_scripts' )
+			);
+		}
 	}
 
 	/**

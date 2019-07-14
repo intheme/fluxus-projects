@@ -243,6 +243,5 @@ class Fluxus_Projects_Utils {
 
 		return true;
 	}
-}
 
 }

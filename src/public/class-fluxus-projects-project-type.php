@@ -74,10 +74,7 @@ class Fluxus_Projects_Project_Type {
 	}
 
 	public function get_grid_options() {
-		$options = array(
-			'columns' => 4,
-			'rows'    => 3,
-		);
+		$options = array();
 
 		$grid_size = $this->get_option( 'grid_size' );
 		$grid_size = explode( ' ', $grid_size );

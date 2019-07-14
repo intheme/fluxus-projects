@@ -1,5 +1,9 @@
 <?php
 
+if ( ! class_exists( 'Media_Meta_Box_Interface' ) ) {
+	return;
+}
+
 class Fluxus_Projects_Project_Media_Meta_Box extends Media_Meta_Box_Interface {
 	function __construct( $post_id ) {
 		parent::__construct( $post_id, 'project' );
@@ -179,7 +183,7 @@ class Fluxus_Projects_Project_Media_Meta_Box extends Media_Meta_Box_Interface {
 		<?php
 	}
 
-	protected function translations() {
+	public function translations() {
 		return array_merge(
 			parent::translations(),
 			array(

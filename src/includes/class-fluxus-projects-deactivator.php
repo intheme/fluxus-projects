@@ -40,8 +40,8 @@ class Fluxus_Projects_Deactivator {
 	public static function verify_dependencies() {
 		if ( ! class_exists( 'Media_Meta_Box_Interface' ) ) {
 			self::deactivate();
-			add_action( 'admin_notices', array( 'Fluxus_Projects_Deactivator', 'media_meta_box_missing_notice' ) );
-		} elseif ( Media_Meta_Box_Interface::MAJOR_VERSION !== 1 ) {
+			add_action( 'admin_notices', array( 'Fluxus_Projects_Deactivator', 'automatic_deactivation_notice' ) );
+		} elseif ( MEDIA_META_BOX_MAJOR_VERSION !== 1 ) {
 			self::deactivate();
 			add_action( 'admin_notices', array( 'Fluxus_Projects_Deactivator', 'media_meta_box_wrong_version_notice' ) );
 		}

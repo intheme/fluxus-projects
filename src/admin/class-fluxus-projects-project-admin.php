@@ -20,7 +20,7 @@ class Fluxus_Projects_Project_Admin {
 
 		// Setup project media manager
 		$project_media_meta_box = new Fluxus_Projects_Project_Media_Meta_Box( $post_id );
-		$project_media_meta_box->initialize_admin();
+		$project_media_meta_box->admin_init();
 	}
 
 	function meta_box_options_content() {

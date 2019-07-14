@@ -19,10 +19,10 @@ class Fluxus_Projects_Project_Media_Meta_Box extends Media_Meta_Box_Interface {
 	function enqueue_scripts() {
 		parent::enqueue_scripts();
 		wp_enqueue_script(
-			'slider-meta-box',
-			get_template_directory_uri() . '/admin/project-media-meta-box/js/project-media-meta-box.js',
+			'fluxus-projects-meta-box',
+			plugin_dir_url( __FILE__ ) . '../../admin/js/fluxus-projects-meta-box.js',
 			array( 'media-meta-box', 'wp-color-picker' ),
-			FLUXUS_VERSION,
+			FLUXUS_PROJECTS_VERSION,
 			true
 		);
 	}

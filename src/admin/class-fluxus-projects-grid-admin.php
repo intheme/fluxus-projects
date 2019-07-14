@@ -78,7 +78,7 @@ class Fluxus_Projects_Grid_Admin {
 			<div class="field">
 				<?php
 
-				it_select_tag(
+				Fluxus_Projects_Utils::select_tag(
 					array( 'name' => 'fluxus_portfolio_grid_orientation' ),
 					$this->get_orientation_options(),
 					$orientation
@@ -92,7 +92,7 @@ class Fluxus_Projects_Grid_Admin {
 			<div class="field">
 				<?php
 
-				it_select_tag(
+				Fluxus_Projects_Utils::select_tag(
 					array( 'name' => 'fluxus_portfolio_grid_aspect_ratio' ),
 					$this->get_aspect_ratio_options(),
 					$aspect_ratio
@@ -109,7 +109,7 @@ class Fluxus_Projects_Grid_Admin {
 			<div class="field">
 				<?php
 
-				it_select_tag(
+				Fluxus_Projects_Utils::select_tag(
 					array( 'name' => 'fluxus_portfolio_grid_size' ),
 					$this->get_grid_size_options(),
 					$grid_size
@@ -142,7 +142,7 @@ class Fluxus_Projects_Grid_Admin {
 	}
 
 	public function admin_options_save( $post_id ) {
-		if ( ! it_check_save_action( $post_id, 'page' ) ) {
+		if ( ! Fluxus_Projects_Utils::check_save_action( $post_id, 'page' ) ) {
 			return $post_id;
 		}
 

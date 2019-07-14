@@ -224,7 +224,7 @@ class Fluxus_Projects_Project_Types_Admin {
 	  <div class="form-field">
 		  <label for="project-type-layout"><?php _e( 'Layout', 'fluxus' ); ?></label>
 		  <select name="project-type-layout" id="project-type-layout" class="postform">
-			  <?php echo it_array_to_select_options( $this->layouts() ); ?>
+			  <?php echo Fluxus_Projects_Utils::array_to_select_options( $this->layouts() ); ?>
 		  </select>
 		  <br>
 		  <span class="description"><?php _e( 'Portfolio layout that will be used to display the project type.', 'fluxus' ); ?></span>
@@ -233,7 +233,7 @@ class Fluxus_Projects_Project_Types_Admin {
 		  <label for="project-type-grid-size"><?php _e( 'Grid Size', 'fluxus' ); ?></label>
 		  <select name="project-type-grid-size" id="project-type-grid-size">
 			  <?php
-				echo it_array_to_select_options(
+				echo Fluxus_Projects_Utils::array_to_select_options(
 					$grod_options->get_grid_size_options(),
 					Fluxus_Projects_Grid_Portfolio::DEFAULT_GRID_SIZE
 				);

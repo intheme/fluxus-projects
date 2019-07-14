@@ -208,4 +208,41 @@ class Fluxus_Projects_Utils {
 		return join( ' ', array_unique( $css_classes ) );
 	}
 
+	public static function check_save_action( $id, $post_type = 'post', $no_inline_save = true ) {
+		// verify if this is an auto save routine. If it is our form has not been submitted, so we dont want
+		// to do anything
+		if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) {
+			return false;
+		}
+
+		if ( ! isset( $_POST['post_type'] ) ) {
+			return false;
+		}
+
+		if ( $no_inline_save ) {
+			if ( isset( $_POST['action'] ) && ( 'inline-save' == $_POST['action'] ) ) {
+				return false;
+			}
+		}
+
+		// Check permissions
+		if ( $post_type == $_POST['post_type'] ) {
+			if ( $post_type == 'page' ) {
+				if ( ! current_user_can( 'edit_page', $id ) ) {
+					return false;
+				}
+			} else {
+				if ( ! current_user_can( 'edit_post', $id ) ) {
+					return false;
+				}
+			}
+		} else {
+			// it's not our post type, we are good to go.
+			return $id;
+		}
+
+		return true;
+	}
+}
+
 }

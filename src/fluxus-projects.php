@@ -36,6 +36,7 @@ if ( ! defined( 'WPINC' ) ) {
  * Rename this for your plugin and update it as you release new versions.
  */
 define( 'FLUXUS_PROJECTS_VERSION', '1.0.0' );
+define( 'FLUXUS_PROJECTS_MAJOR_VERSION', 1 );
 
 define( 'FLUXUS_PROJECTS_PLUGIN_NAME', 'fluxus-projects' );
 

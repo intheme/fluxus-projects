@@ -136,7 +136,7 @@ class Fluxus_Projects_Project_Admin {
 
 	function meta_box_options_content_save( $post_id ) {
 
-		if ( ! it_check_save_action( $post_id, 'fluxus_portfolio' ) ) {
+		if ( ! Fluxus_Projects_Utils::check_save_action( $post_id, 'fluxus_portfolio' ) ) {
 			return $post_id;
 		}
 
@@ -144,7 +144,7 @@ class Fluxus_Projects_Project_Admin {
 
 		$project->update_from_array( $_POST );
 
-		if ( it_key_is_array( $_POST, 'fluxus_project_info_title' ) ) {
+		if ( isset( $_POST['fluxus_project_info_title'] ) && is_array( $_POST['fluxus_project_info_title'] ) ) {
 
 			$titles   = $_POST['fluxus_project_info_title'];
 			$contents = $_POST['fluxus_project_info_content'];
